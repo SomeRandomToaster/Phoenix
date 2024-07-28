@@ -15,12 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Test.h">
+    <ClInclude Include="src\Phoenix\Core.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Application.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\EntryPoint.h">
       <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Test.cpp">
+    <ClCompile Include="src\Phoenix\Application.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>
