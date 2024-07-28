@@ -1,0 +1,3 @@
+[submodule "Phoenix/lib/spdlog"]
+	path = Phoenix/lib/spdlog
+	url = https://github.com/gabime/spdlog
