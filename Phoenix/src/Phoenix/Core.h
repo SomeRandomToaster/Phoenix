@@ -10,3 +10,5 @@
 #else
 	#error Phoenix supports only Windows!
 #endif // PH_PLATFORM_WINDOWS
+
+#define BIT(x) (1 << x)

@@ -8,6 +8,7 @@ namespace Phoenix {
 		
 	}
 	void Application::Run() {
+
 		while (true);
 	}
 }

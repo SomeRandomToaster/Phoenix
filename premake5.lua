@@ -23,11 +23,12 @@ project "Phoenix"
 	}
 
 	includedirs {
+		"%{prj.name}/src",
 		"%{prj.name}/lib/spdlog/include"
 	}
 
 	filter "system:windows"
-		cppdialect "C++14"
+		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
 
@@ -76,7 +77,7 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++14"
+		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
 
