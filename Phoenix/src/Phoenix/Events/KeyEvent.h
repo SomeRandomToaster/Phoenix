@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Event.h"
-#include <sstream>
 
 namespace Phoenix {
 	class PH_API KeyEvent : public Event

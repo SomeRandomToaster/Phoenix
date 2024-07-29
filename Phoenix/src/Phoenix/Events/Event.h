@@ -2,9 +2,6 @@
 
 #include "Phoenix/Core.h"
 
-#include <string>
-#include <functional>
-
 
 namespace Phoenix {
 	enum class EventType {

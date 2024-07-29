@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace Phoenix {
 
 	class PH_API WindowResizeEvent : public Event
