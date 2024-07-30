@@ -11,6 +11,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 
 include "Phoenix/lib/glfw"
+include "Phoenix/lib/glad"
 
 project "Phoenix"
 	location "Phoenix"
@@ -32,11 +33,13 @@ project "Phoenix"
 	includedirs {
 		"%{prj.name}/src",
 		"%{prj.name}/lib/spdlog/include",
-		"%{prj.name}/lib/glfw/include"
+		"%{prj.name}/lib/glfw/include",
+		"%{prj.name}/lib/glad/include"
 	}
 
 	links {
 		"GLFW",
+		"GLAD",
 		"opengl32.lib"
 	}
 
@@ -47,6 +50,7 @@ project "Phoenix"
 
 		defines {
 			"PH_PLATFORM_WINDOWS",
+			"GLFW_INCLUDE_NONE",
 			"PH_BUILD_DLL"
 		}
 

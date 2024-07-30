@@ -2,6 +2,7 @@
 #include "Application.h"
 
 #include "GLFW/glfw3.h"
+#include "glad/glad.h"
 
 namespace Phoenix {
 
@@ -10,6 +11,7 @@ namespace Phoenix {
 	Application::Application() {
 		window = std::unique_ptr<Window>(Window::Create());
 		window->SetEventCallback(BIND_EVENT_FUNCTION(OnEvent));
+
 	}
 	Application::~Application() {
 		
