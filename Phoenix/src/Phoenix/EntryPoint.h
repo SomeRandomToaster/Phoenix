@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Application.h"
-#include "Log.h"
 
 extern Phoenix::Application* Phoenix::CreateApplication();
 

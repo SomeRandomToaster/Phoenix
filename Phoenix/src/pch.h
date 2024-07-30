@@ -4,6 +4,8 @@
 	#include <Windows.h>
 #endif
 
+#include "Phoenix/Log.h"
+
 #include <functional>
 #include <memory.h>
 
