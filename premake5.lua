@@ -9,6 +9,9 @@ workspace "Phoenix"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+
+include "Phoenix/lib/glfw"
+
 project "Phoenix"
 	location "Phoenix"
 	kind "SharedLib"
@@ -28,7 +31,13 @@ project "Phoenix"
 
 	includedirs {
 		"%{prj.name}/src",
-		"%{prj.name}/lib/spdlog/include"
+		"%{prj.name}/lib/spdlog/include",
+		"%{prj.name}/lib/glfw/include"
+	}
+
+	links {
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"

@@ -11,4 +11,13 @@
 	#error Phoenix supports only Windows!
 #endif // PH_PLATFORM_WINDOWS
 
+#ifdef PH_ENABLE_ASSERTS
+	#define PH_CORE_ASSERT(x, ...) if(!x) {PH_CORE_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak()}
+	#define PH_ASSERT(x, ...) if(!x) {PH_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak()}
+#else
+	#define PH_CORE_ASSERT(x, ...)
+	#define PH_ASSERT(x, ...)
+#endif // PH_ENABLE_ASSERTS
+
+
 #define BIT(x) (1 << x)
