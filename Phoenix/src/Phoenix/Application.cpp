@@ -20,6 +20,11 @@ namespace Phoenix {
 		{
 			glClearColor(1, 1, 0, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			for (Layer* layer : layerStack) {
+				layer->OnUpdate();
+			}
+
 			window->OnUpdate();
 		}
 	}
@@ -29,12 +34,29 @@ namespace Phoenix {
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNCTION(OnWindowClose));
 
-		PH_CORE_TRACE(event.ToString());
+		for (auto it = layerStack.end(); it != layerStack.begin();)
+		{
+			(*(--it))->OnEvent(event);
+			if (event.Handled) {
+				break;
+			}
+		}
+
+		//PH_CORE_TRACE(event.ToString());
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& event) 
 	{
 		isRunning = false;
 		return true;
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		layerStack.PushLayer(layer);
+	}
+	void Application::PushOverlay(Layer* layer)
+	{
+		layerStack.PushOverlay(layer);
 	}
 }

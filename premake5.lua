@@ -57,14 +57,17 @@ project "Phoenix"
 	filter "configurations:Debug"
 		defines "PH_DEBUG"
 		symbols "On"
+		buildoptions "/MDd"
 
 	filter "configurations:Release"
 		defines "PH_RELEASE"
 		optimize "On"
+		buildoptions "/MD"
 
 	filter "configurations:Dist"
 		defines "PH_DIST"
 		optimize "On"
+		buildoptions "/MD"
 
 
 project "Sandbox"
@@ -101,11 +104,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "PH_DEBUG"
 		symbols "On"
+		buildoptions "/MDd"
 
 	filter "configurations:Release"
 		defines "PH_RELEASE"
 		optimize "On"
+		buildoptions "/MD"
 
 	filter "configurations:Dist"
 		defines "PH_DIST"
 		optimize "On"
+		buildoptions "/MD"

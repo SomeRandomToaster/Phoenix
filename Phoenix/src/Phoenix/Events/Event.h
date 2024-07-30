@@ -33,8 +33,7 @@ namespace Phoenix {
 		inline bool IsInCategory(EventCategory category) {
 			return GetCategoryFlags() & category;
 		}
-	protected:
-		bool handled = false;
+		bool Handled = false;
 	};
 
 	
@@ -51,7 +50,7 @@ namespace Phoenix {
 		bool Dispatch(EventFunction<T> func) {
 			if (event.GetEventType() == T::GetStaticType())
 			{
-				event.handled = func(*((T*)&event));
+				event.Handled = func(*((T*)&event));
 				return true;
 			}
 			return false;
