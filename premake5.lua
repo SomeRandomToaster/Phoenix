@@ -12,6 +12,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 include "Phoenix/lib/glfw"
 include "Phoenix/lib/glad"
+include "Phoenix/lib/imgui"
 
 project "Phoenix"
 	location "Phoenix"
@@ -34,12 +35,14 @@ project "Phoenix"
 		"%{prj.name}/src",
 		"%{prj.name}/lib/spdlog/include",
 		"%{prj.name}/lib/glfw/include",
-		"%{prj.name}/lib/glad/include"
+		"%{prj.name}/lib/glad/include",
+		"%{prj.name}/lib/imgui"
 	}
 
 	links {
 		"GLFW",
 		"GLAD",
+		"ImGui",
 		"opengl32.lib"
 	}
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Application.h"
-
+ 
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 
@@ -8,7 +8,11 @@ namespace Phoenix {
 
 #define BIND_EVENT_FUNCTION(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+	Application* Application::instance = nullptr;
+
 	Application::Application() {
+		PH_CORE_ASSERT(!instance, "Application already exists!");
+		instance = this;
 		window = std::unique_ptr<Window>(Window::Create());
 		window->SetEventCallback(BIND_EVENT_FUNCTION(OnEvent));
 

@@ -16,7 +16,8 @@ public:
 class Sandbox : public Phoenix::Application {
 public:
 	Sandbox() {
-		//PushLayer(new MyLayer());
+		PushLayer(new MyLayer());
+		PushOverlay(new Phoenix::ImGuiLayer());
 	}
 	~Sandbox() {
 

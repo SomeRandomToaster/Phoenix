@@ -18,10 +18,15 @@ namespace Phoenix {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+
+		inline static Application& Get() { return *instance; }
+		inline Window& GetWindow() { return *window; }
 	private:
 		std::unique_ptr<Window> window;
 		bool isRunning = true;
 		LayerStack layerStack;
+	private:
+		static Application* instance;
 	};
 	Application* CreateApplication();
 }

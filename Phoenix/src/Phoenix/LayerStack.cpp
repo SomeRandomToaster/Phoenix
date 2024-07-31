@@ -18,12 +18,14 @@ namespace Phoenix
 	void LayerStack::PushLayer(Layer* layer)
 	{
 		layerInsert = layers.emplace(layerInsert, layer);
+		layer->OnAttach();
 	}
 	
 	void LayerStack::PopLayer(Layer* layer)
 	{
 		auto it = std::find(layers.begin(), layers.end(), layer);
 		if (it != layers.end()) {
+			layer->OnDetach();
 			layers.erase(it);
 			layerInsert--;
 		}
@@ -32,12 +34,14 @@ namespace Phoenix
 	void LayerStack::PushOverlay(Layer* layer)
 	{
 		layers.emplace_back(layer);
+		layer->OnAttach();
 	}
 
 	void LayerStack::PopOverlay(Layer* layer)
 	{
 		auto it = std::find(layers.begin(), layers.end(), layer);
 		if (it != layers.end()) {
+			layer->OnDetach();
 			layers.erase(it);
 		}
 	}
