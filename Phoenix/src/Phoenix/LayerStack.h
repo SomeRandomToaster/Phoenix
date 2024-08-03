@@ -15,11 +15,10 @@ namespace Phoenix
 		void PushOverlay(Layer* layer);
 		void PopOverlay(Layer* layer);
 			
-		const std::vector<Layer*>::iterator begin() { return layers.begin(); }
-		const std::vector<Layer*>::iterator end() { return layers.end(); }
+		const std::deque<Layer*>::iterator begin() { return layers.begin(); }
+		const std::deque<Layer*>::iterator end() { return layers.end(); }
 	private:
-		std::vector<Layer*> layers;
-		std::vector<Layer*>::iterator layerInsert;
+		std::deque<Layer*> layers;
 
 	};
 }

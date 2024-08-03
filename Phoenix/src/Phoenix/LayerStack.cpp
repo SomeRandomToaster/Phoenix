@@ -5,7 +5,7 @@ namespace Phoenix
 {
 	LayerStack::LayerStack()
 	{
-		layerInsert = layers.begin();
+
 	}
 
 	LayerStack::~LayerStack()
@@ -17,7 +17,7 @@ namespace Phoenix
 
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		layerInsert = layers.emplace(layerInsert, layer);
+		layers.push_front(layer);
 		layer->OnAttach();
 	}
 	
@@ -27,13 +27,12 @@ namespace Phoenix
 		if (it != layers.end()) {
 			layer->OnDetach();
 			layers.erase(it);
-			layerInsert--;
 		}
 	}
 
 	void LayerStack::PushOverlay(Layer* layer)
 	{
-		layers.emplace_back(layer);
+		layers.push_back(layer);
 		layer->OnAttach();
 	}
 

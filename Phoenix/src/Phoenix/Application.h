@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
+#include "Phoenix/ImGui/ImGuiLayer.h"
 
 namespace Phoenix {
 	class PH_API Application
@@ -23,6 +24,7 @@ namespace Phoenix {
 		inline Window& GetWindow() { return *window; }
 	private:
 		std::unique_ptr<Window> window;
+		ImGuiLayer* imGuiLayer;
 		bool isRunning = true;
 		LayerStack layerStack;
 	private:

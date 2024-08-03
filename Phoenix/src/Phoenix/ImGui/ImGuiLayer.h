@@ -18,19 +18,14 @@ namespace Phoenix
 		void OnAttach();
 		void OnDetach();
 
-		void OnUpdate() override;
+		void OnImGuiRender() override;
 		void OnEvent(Event& event) override;
 
-		bool OnWindowResizeEvent(WindowResizeEvent& event);
-		bool OnKeyPressedEvent(KeyPressedEvent& event);
-		bool OnKeyReleasedEvent(KeyReleasedEvent& event);
-		bool OnKeyTypedEvent(KeyTypedEvent& event);
-		bool OnMouseMovedEvent(MouseMovedEvent& event);
-		bool OnMouseScrolledEvent(MouseScrolledEvent& event);
-		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& event);
-		bool OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& event);
+		void Begin();
+		void End();
 
-		static ImGuiKey PhoenixKeyToImGui(unsigned int keycode);
+
+		//static ImGuiKey PhoenixKeyToImGui(unsigned int keycode);
 	private:
 		float lastUpdateTime = 0 ;
 		

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Application.h"
- 
+
+
 #include "GLFW/glfw3.h"
 #include "glad/glad.h"
 
@@ -14,7 +15,8 @@ namespace Phoenix {
 		instance = this;
 		window = std::unique_ptr<Window>(Window::Create());
 		window->SetEventCallback(BIND_EVENT_FUNCTION(Application::OnEvent));
-
+		imGuiLayer = new ImGuiLayer();
+		layerStack.PushOverlay(imGuiLayer);
 	}
 	Application::~Application() {
 		
@@ -29,6 +31,14 @@ namespace Phoenix {
 			for (Layer* layer : layerStack) {
 				layer->OnUpdate();
 			}
+
+			imGuiLayer->Begin();
+
+			for(Layer* layer : layerStack) {
+				layer->OnImGuiRender();
+			}
+
+			imGuiLayer->End();
 
 			window->OnUpdate();
 		}
