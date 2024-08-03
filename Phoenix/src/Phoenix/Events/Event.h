@@ -8,7 +8,7 @@ namespace Phoenix {
 		None = 0,
 		AppTick, AppUpdate, AppRender,
 		WindowClose, WindowResize, WindowMoved, WindowFocus, WindowLostFocus,
-		KeyPressed, KeyReleased,
+		KeyPressed, KeyReleased, KeyTyped,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 

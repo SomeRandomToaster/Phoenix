@@ -5,11 +5,13 @@ class MyLayer : public Phoenix::Layer {
 public:
 	MyLayer() : Layer("MyLayer") {}
 	void OnEvent(Phoenix::Event& event) override {
-		PH_INFO("layerEvent: {0}", event.ToString());
+		//PH_INFO("layerEvent: {0}", event.ToString());
 	}
 
 	void OnUpdate() override {
-		PH_TRACE("layerUpdate");
+		std::pair<float, float> pos;
+		pos = Phoenix::Input::GetMousePos();
+		PH_INFO("{0} {1}", pos.first, pos.second);
 	}
 };
 

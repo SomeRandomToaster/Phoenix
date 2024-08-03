@@ -164,11 +164,14 @@
     <ClInclude Include="src\Phoenix\Events\KeyEvent.h" />
     <ClInclude Include="src\Phoenix\Events\MouseEvent.h" />
     <ClInclude Include="src\Phoenix\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Phoenix\Input.h" />
+    <ClInclude Include="src\Phoenix\KeyCodes.h" />
     <ClInclude Include="src\Phoenix\Layer.h" />
     <ClInclude Include="src\Phoenix\LayerStack.h" />
     <ClInclude Include="src\Phoenix\Log.h" />
     <ClInclude Include="src\Phoenix\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
@@ -179,6 +182,7 @@
     <ClCompile Include="src\Phoenix\LayerStack.cpp" />
     <ClCompile Include="src\Phoenix\Log.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

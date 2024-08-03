@@ -6,7 +6,6 @@
 
 namespace Phoenix {
 
-#define BIND_EVENT_FUNCTION(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application* Application::instance = nullptr;
 
@@ -14,7 +13,7 @@ namespace Phoenix {
 		PH_CORE_ASSERT(!instance, "Application already exists!");
 		instance = this;
 		window = std::unique_ptr<Window>(Window::Create());
-		window->SetEventCallback(BIND_EVENT_FUNCTION(OnEvent));
+		window->SetEventCallback(BIND_EVENT_FUNCTION(Application::OnEvent));
 
 	}
 	Application::~Application() {
@@ -38,7 +37,7 @@ namespace Phoenix {
 	void Application::OnEvent(Event& event) 
 	{
 		EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNCTION(OnWindowClose));
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNCTION(Application::OnWindowClose));
 
 		for (auto it = layerStack.end(); it != layerStack.begin();)
 		{
