@@ -28,7 +28,9 @@ project "Phoenix"
 
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/lib/glm/glm/**.hpp",
+		"%{prj.name}/lib/glm/glm/**.inl"
 	}
 
 	includedirs {
@@ -36,7 +38,8 @@ project "Phoenix"
 		"%{prj.name}/lib/spdlog/include",
 		"%{prj.name}/lib/glfw/include",
 		"%{prj.name}/lib/glad/include",
-		"%{prj.name}/lib/imgui"
+		"%{prj.name}/lib/imgui",
+		"%{prj.name}/lib/glm"
 	}
 
 	links {
@@ -92,7 +95,8 @@ project "Sandbox"
 
 	includedirs {
 		"Phoenix/lib/spdlog/include",
-		"Phoenix/src"
+		"Phoenix/src",
+		"Phoenix/lib/glm"
 	}
 
 	links {

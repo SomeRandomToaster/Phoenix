@@ -7,3 +7,6 @@
 [submodule "Phoenix/lib/imgui"]
 	path = Phoenix/lib/imgui
 	url = https://github.com/TheCherno/imgui
+[submodule "Phoenix/lib/glm"]
+	path = Phoenix/lib/glm
+	url = https://github.com/g-truc/glm
