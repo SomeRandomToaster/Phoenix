@@ -2,11 +2,15 @@
 
 
 #ifdef PH_PLATFORM_WINDOWS
-	#ifdef PH_BUILD_DLL
-		#define PH_API __declspec(dllexport)
+	#ifdef PH_DINAMIC_BUILD
+		#ifdef PH_BUILD_DLL
+			#define PH_API __declspec(dllexport)
+		#else
+			#define PH_API __declspec(dllimport)
+		#endif
 	#else
-		#define PH_API __declspec(dllimport)
-	#endif
+		#define PH_API
+	#endif // PH_DINAMIC_BUILD
 #else
 	#error Phoenix supports only Windows!
 #endif // PH_PLATFORM_WINDOWS

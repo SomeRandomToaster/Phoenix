@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <Phoenix.h>
 
+#include "imgui.h"
 #include "glm/mat4x4.hpp"
 
 class MyLayer : public Phoenix::Layer {
@@ -20,6 +21,16 @@ public:
 		
 	}
 
+	void OnImGuiRender() override 
+	{
+		ImGui::Begin("Test window");
+
+		ImGui::Text("Hello, World!");
+
+		ImGui::End();
+
+	}
+
 	void OnUpdate() override {
 		
 	}
@@ -29,7 +40,6 @@ class Sandbox : public Phoenix::Application {
 public:
 	Sandbox() {
 		PushLayer(new MyLayer());
-		PushOverlay(new Phoenix::ImGuiLayer());
 	}
 	~Sandbox() {
 

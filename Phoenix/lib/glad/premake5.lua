@@ -24,3 +24,5 @@ project "GLAD"
 
 	filter {"system:windows", "configurations:Release"} 
 		buildoptions "/MT"
+	filter {"system:windows", "configurations:Debug"} 
+		buildoptions "/MTd"

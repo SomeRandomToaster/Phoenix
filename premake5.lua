@@ -16,8 +16,9 @@ include "Phoenix/lib/imgui"
 
 project "Phoenix"
 	location "Phoenix"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
+	cppdialect "C++17"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -50,7 +51,6 @@ project "Phoenix"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
 
@@ -60,30 +60,27 @@ project "Phoenix"
 			"PH_BUILD_DLL"
 		}
 
-		postbuildcommands {
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
-		}
-
 	filter "configurations:Debug"
 		defines "PH_DEBUG"
 		symbols "On"
-		buildoptions "/MDd"
+		buildoptions "/MTd"
 
 	filter "configurations:Release"
 		defines "PH_RELEASE"
 		optimize "On"
-		buildoptions "/MD"
+		buildoptions "/MT"
 
 	filter "configurations:Dist"
 		defines "PH_DIST"
 		optimize "On"
-		buildoptions "/MD"
+		buildoptions "/MT"
 
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -96,7 +93,8 @@ project "Sandbox"
 	includedirs {
 		"Phoenix/lib/spdlog/include",
 		"Phoenix/src",
-		"Phoenix/lib/glm"
+		"Phoenix/lib/glm",
+		"Phoenix/lib/imgui"
 	}
 
 	links {
@@ -104,7 +102,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
 
@@ -115,14 +112,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "PH_DEBUG"
 		symbols "On"
-		buildoptions "/MDd"
+		buildoptions "/MTd"
 
 	filter "configurations:Release"
 		defines "PH_RELEASE"
 		optimize "On"
-		buildoptions "/MD"
+		buildoptions "/MT"
 
 	filter "configurations:Dist"
 		defines "PH_DIST"
 		optimize "On"
-		buildoptions "/MD"
+		buildoptions "/MT"
