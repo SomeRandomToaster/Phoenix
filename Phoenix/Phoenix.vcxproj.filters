@@ -34,8 +34,14 @@
     <Filter Include="src\Phoenix\ImGui">
       <UniqueIdentifier>{C159ED7C-2D70-EB12-76E7-7634E23CBC9A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Phoenix\Renderer">
+      <UniqueIdentifier>{DD744863-C903-D22C-7222-E6275E90E2D2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\OpenGL">
+      <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Platform\Windows">
       <UniqueIdentifier>{5B054582-4794-CE4B-F0B2-E246DC20DFF1}</UniqueIdentifier>
@@ -1332,8 +1338,14 @@
     <ClInclude Include="src\Phoenix\Log.h">
       <Filter>src\Phoenix</Filter>
     </ClInclude>
+    <ClInclude Include="src\Phoenix\Renderer\GraphicsContext.h">
+      <Filter>src\Phoenix\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Phoenix\Window.h">
       <Filter>src\Phoenix</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>src\Platform\Windows</Filter>
@@ -1344,8 +1356,6 @@
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\Renderer\GraphicsContext.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phoenix\Application.cpp">
@@ -1366,6 +1376,9 @@
     <ClCompile Include="src\Phoenix\Log.cpp">
       <Filter>src\Phoenix</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
@@ -1375,6 +1388,5 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
   </ItemGroup>
 </Project>
