@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Phoenix/Layer.h"
-#include "Phoenix/Events/ApplicationEvent.h"
-#include "Phoenix/Events/KeyEvent.h"
-#include "Phoenix/Events/MouseEvent.h"
 
 enum ImGuiKey;
 
