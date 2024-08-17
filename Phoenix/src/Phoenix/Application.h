@@ -5,6 +5,7 @@
 #include "LayerStack.h"
 #include "Phoenix/ImGui/ImGuiLayer.h"
 #include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
 
 namespace Phoenix {
 	class PH_API Application
@@ -26,11 +27,13 @@ namespace Phoenix {
 	private:
 		std::unique_ptr<Window> window;
 		std::unique_ptr<Shader> shader;
+		std::unique_ptr<VertexBuffer> vertexBuffer;
+		std::unique_ptr<IndexBuffer> indexBuffer;
 		ImGuiLayer* imGuiLayer;
 		bool isRunning = true;
 		LayerStack layerStack;
 
-		unsigned int vertexArray, vertexBuffer, indexBuffer;
+		unsigned int vertexArray;
 	private:
 		static Application* instance;
 	};
