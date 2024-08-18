@@ -18,10 +18,10 @@ namespace Phoenix {
 		imGuiLayer = new ImGuiLayer();
 		layerStack.PushOverlay(imGuiLayer);
 
-		float vertices[3 * 3] = {
-			-0.5, -0.5, 0.0,
-			0.5, -0.5, 0.0,
-			0.0, 0.5, 0.0
+		float vertices[3 * 9] = {
+			-0.5, -0.5, 0.0,	0.0, 0.0,	1.0, 0.0, 0.0, 1.0,
+			 0.5, -0.5, 0.0,    1.0, 0.0,	0.0, 1.0, 0.0, 1.0,
+			 0.0,  0.5, 0.0,    0.0, 1.0,	0.0, 0.0, 1.0, 1.0
 		};
 
 		unsigned int indices[3] = { 0, 1, 2 };
@@ -29,10 +29,22 @@ namespace Phoenix {
 		glGenVertexArrays(1, &vertexArray);
 		glBindVertexArray(vertexArray);
 
-		vertexBuffer.reset(VertexBuffer::Create(vertices, 3 * sizeof(float), 3));
+		BufferLayout layout = {
+			{Float3, "a_Position"},
+			{Float2, "a_TextureCoord"},
+			{Float4, "a_Color"}
+		};
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		vertexBuffer.reset(VertexBuffer::Create(vertices, layout.GetStride(), 3));
+
+		int index = 0;
+		for (auto it = layout.begin(); it != layout.end(); it++)
+		{
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index, ShaderDataTypeComponentCount(it->type), ShaderDataTypeToGLBaseType(it->type),
+				it->normalize, layout.GetStride(), (void*)it->offset);
+			index++;
+		}
 
 		indexBuffer.reset(IndexBuffer::Create(indices, 3));
 
@@ -40,11 +52,14 @@ namespace Phoenix {
 			#version 330 core
 
 			out vec3 v_Position;
+			out vec4 v_Color;
 			layout(location = 0) in vec3 a_Position;
+			layout(location = 2) in vec4 a_Color;
 
 			void main()
 			{
 				v_Position = a_Position;
+				v_Color = a_Color;
 				gl_Position = vec4(v_Position, 1.0f);
 			}; 
 		)";
@@ -54,10 +69,11 @@ namespace Phoenix {
             layout(location = 0) out vec4 color;
 			
 			in vec3 v_Position;
+			in vec4 v_Color;
 
 			void main()
 			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+				color = v_Color;
 			}
 		)";
 
