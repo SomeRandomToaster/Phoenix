@@ -18,37 +18,57 @@ namespace Phoenix {
 		imGuiLayer = new ImGuiLayer();
 		layerStack.PushOverlay(imGuiLayer);
 
-		float vertices[3 * 9] = {
+		float triangleVertices[3 * 9] = {
 			-0.5, -0.5, 0.0,	0.0, 0.0,	1.0, 0.0, 0.0, 1.0,
 			 0.5, -0.5, 0.0,    1.0, 0.0,	0.0, 1.0, 0.0, 1.0,
 			 0.0,  0.5, 0.0,    0.0, 1.0,	0.0, 0.0, 1.0, 1.0
 		};
 
-		unsigned int indices[3] = { 0, 1, 2 };
+		float squareVertices[4 * 3]
+		{
+			0.25, 0.0,  0.0,
+			0.5,  0.0,  0.0,
+			0.5,  0.5,  0.0,
+			0.25, 0.5,  0.0
+		};
 
-		glGenVertexArrays(1, &vertexArray);
-		glBindVertexArray(vertexArray);
+		unsigned int triangleIndices[3] = { 0, 1, 2 };
+		unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
 
-		BufferLayout layout = {
+		triangleVA.reset(VertexArray::Create());
+		squareVA.reset(VertexArray::Create());
+
+		BufferLayout triangleVBlayout = {
 			{Float3, "a_Position"},
 			{Float2, "a_TextureCoord"},
 			{Float4, "a_Color"}
 		};
+		BufferLayout squareVBlayout = {
+			{Float3, "a_Position"}
+		};
 
-		vertexBuffer.reset(VertexBuffer::Create(vertices, layout.GetStride(), 3));
+		std::shared_ptr<VertexBuffer> triangleVB;
+		std::shared_ptr<VertexBuffer> squareVB;
 
-		int index = 0;
-		for (auto it = layout.begin(); it != layout.end(); it++)
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, ShaderDataTypeComponentCount(it->type), ShaderDataTypeToGLBaseType(it->type),
-				it->normalize, layout.GetStride(), (void*)it->offset);
-			index++;
-		}
+		triangleVB.reset(VertexBuffer::Create(triangleVertices, triangleVBlayout.GetStride(), 3));
+		triangleVB->SetLayout(triangleVBlayout);
+		
+		squareVB.reset(VertexBuffer::Create(squareVertices, squareVBlayout.GetStride(), 4));
+		squareVB->SetLayout(squareVBlayout);
+		
+		triangleVA->AddVertexBuffer(triangleVB);
+		squareVA->AddVertexBuffer(squareVB);
 
-		indexBuffer.reset(IndexBuffer::Create(indices, 3));
+		std::shared_ptr<IndexBuffer> triangleIB;
+		std::shared_ptr<IndexBuffer> squareIB;
 
-		std::string vertexSrc = R"(
+		triangleIB.reset(IndexBuffer::Create(triangleIndices, 3));
+		squareIB.reset(IndexBuffer::Create(squareIndices, 6));
+
+		triangleVA->AddIndexBuffer(triangleIB);
+		squareVA->AddIndexBuffer(squareIB);
+
+		std::string triangleVertexShaderSrc = R"(
 			#version 330 core
 
 			out vec3 v_Position;
@@ -63,7 +83,7 @@ namespace Phoenix {
 				gl_Position = vec4(v_Position, 1.0f);
 			}; 
 		)";
-		std::string fragmentSrc = R"(
+		std::string triangleFragmentShaderSrc = R"(
 			#version 330 core
 
             layout(location = 0) out vec4 color;
@@ -77,8 +97,34 @@ namespace Phoenix {
 			}
 		)";
 
-		shader.reset(new Shader(vertexSrc, fragmentSrc));
-		shader->Bind();
+		std::string squareVertexShaderSrc = R"(
+			#version 330 core
+
+			out vec3 v_Position;
+
+			layout(location = 0) in vec3 a_Position;
+
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = vec4(v_Position, 1.0f);
+			}; 
+		)";
+		std::string squareFragmentShaderSrc = R"(
+			#version 330 core
+
+            layout(location = 0) out vec4 color;
+			
+			in vec3 v_Position;
+
+			void main()
+			{
+				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+			}
+		)";
+
+		triangleShader.reset(new Shader(triangleVertexShaderSrc, triangleFragmentShaderSrc));
+		squareShader.reset(new Shader(squareVertexShaderSrc, squareFragmentShaderSrc));
 	}
 	Application::~Application() {
 		
@@ -90,8 +136,13 @@ namespace Phoenix {
 			glClearColor(0.1, 0.1, 0.1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			glBindVertexArray(vertexArray);
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			triangleVA->Bind();
+			triangleShader->Bind();
+			glDrawElements(GL_TRIANGLES, triangleVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+			squareVA->Bind();
+			squareShader->Bind();
+			glDrawElements(GL_TRIANGLES, squareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : layerStack) {
 				layer->OnUpdate();

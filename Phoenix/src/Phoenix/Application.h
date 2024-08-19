@@ -6,6 +6,7 @@
 #include "Phoenix/ImGui/ImGuiLayer.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
+#include "Renderer/VertexArray.h"
 
 namespace Phoenix {
 	class PH_API Application
@@ -26,14 +27,16 @@ namespace Phoenix {
 		inline Window& GetWindow() { return *window; }
 	private:
 		std::unique_ptr<Window> window;
-		std::unique_ptr<Shader> shader;
-		std::unique_ptr<VertexBuffer> vertexBuffer;
-		std::unique_ptr<IndexBuffer> indexBuffer;
+
+		std::unique_ptr<Shader> triangleShader;
+		std::unique_ptr<Shader> squareShader;
+		std::shared_ptr<VertexArray> triangleVA;
+		std::shared_ptr<VertexArray> squareVA;
+
 		ImGuiLayer* imGuiLayer;
 		bool isRunning = true;
 		LayerStack layerStack;
 
-		unsigned int vertexArray;
 	private:
 		static Application* instance;
 	};

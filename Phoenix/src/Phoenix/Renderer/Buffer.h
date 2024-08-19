@@ -28,7 +28,9 @@ namespace Phoenix
 	{
 	public:
 		BufferLayout(const std::initializer_list<BufferElement>& list);
+		BufferLayout() {};
 		unsigned int GetStride() { return stride; }
+		const std::vector<BufferElement>& GetElements() const { return elements; }
 
 		const std::vector<BufferElement>::iterator begin() { return elements.begin(); }
 		const std::vector<BufferElement>::iterator end() { return elements.end(); }
@@ -42,7 +44,12 @@ namespace Phoenix
 	public:
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
+
+		virtual const BufferLayout& GetLayout() const = 0;
+		virtual void SetLayout(const BufferLayout& layout) = 0;
+
 		virtual unsigned int GetCount() const = 0;
+		
 		virtual ~VertexBuffer() {}
 
 		static VertexBuffer* Create(const void* vertices, unsigned int vertexSize, unsigned int count);
