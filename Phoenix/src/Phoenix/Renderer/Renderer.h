@@ -1,18 +1,17 @@
 #pragma once
 
+#include "RendererAPI.h"
+#include "VertexArray.h"
+
 namespace Phoenix
 {
-	enum RendererAPI
-	{
-		None = 0,
-		OpenGL = 1
-	};
-
 	class Renderer
 	{
 	public:
-		static inline RendererAPI GetAPI() { return rendererAPI; }
-	private:
-		static RendererAPI rendererAPI;
+		static void BeginScene();
+		static void EndScene();
+		static void Submit(const std::shared_ptr<VertexArray>& va);
+
+		static inline RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	};
 }

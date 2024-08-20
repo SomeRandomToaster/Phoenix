@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "Application.h"
 
-
-#include "GLFW/glfw3.h"
-#include "glad/glad.h"
+#include "Renderer/Renderer.h"
+#include "Renderer/RenderCommand.h"
 
 namespace Phoenix {
 
@@ -133,16 +132,17 @@ namespace Phoenix {
 
 		while (isRunning) 
 		{
-			glClearColor(0.1, 0.1, 0.1, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::ClearColor(glm::vec4(0.1, 0.1, 0.1, 1.0));
 
-			triangleVA->Bind();
+			Renderer::BeginScene();
+
 			triangleShader->Bind();
-			glDrawElements(GL_TRIANGLES, triangleVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(triangleVA);
 
-			squareVA->Bind();
 			squareShader->Bind();
-			glDrawElements(GL_TRIANGLES, squareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(squareVA);
+
+			Renderer::EndScene();
 
 			for (Layer* layer : layerStack) {
 				layer->OnUpdate();
