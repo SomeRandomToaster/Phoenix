@@ -7,6 +7,7 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
+#include "Renderer/OrthographicCamera.h"
 
 namespace Phoenix {
 	class PH_API Application
@@ -27,11 +28,6 @@ namespace Phoenix {
 		inline Window& GetWindow() { return *window; }
 	private:
 		std::unique_ptr<Window> window;
-
-		std::unique_ptr<Shader> triangleShader;
-		std::unique_ptr<Shader> squareShader;
-		std::shared_ptr<VertexArray> triangleVA;
-		std::shared_ptr<VertexArray> squareVA;
 
 		ImGuiLayer* imGuiLayer;
 		bool isRunning = true;
