@@ -33,6 +33,8 @@ namespace Phoenix {
 		bool isRunning = true;
 		LayerStack layerStack;
 
+		float lastFrameTime = 0.0f;
+
 	private:
 		static Application* instance;
 	};

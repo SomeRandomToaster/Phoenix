@@ -140,33 +140,33 @@ public:
 
 	}
 
-	void OnUpdate() override 
+	void OnUpdate(Phoenix::Timestep ts) override 
 	{
 		
 		if (Phoenix::Input::IsKeyPressed(PH_KEY_A))
 		{
-			zRotation += cameraRotationSpeed;
+			zRotation += cameraRotationSpeed * ts;
 		}
 		if (Phoenix::Input::IsKeyPressed(PH_KEY_D))
 		{
-			zRotation -= cameraRotationSpeed;
+			zRotation -= cameraRotationSpeed * ts;
 		}
 
 		if (Phoenix::Input::IsKeyPressed(PH_KEY_LEFT))
 		{
-			cameraLocation.x -= cameraMovementSpeed;
+			cameraLocation.x -= cameraMovementSpeed * ts;
 		}
 		if (Phoenix::Input::IsKeyPressed(PH_KEY_RIGHT))
 		{
-			cameraLocation.x += cameraMovementSpeed;
+			cameraLocation.x += cameraMovementSpeed * ts;
 		}
 		if (Phoenix::Input::IsKeyPressed(PH_KEY_DOWN))
 		{
-			cameraLocation.y -= cameraMovementSpeed;
+			cameraLocation.y -= cameraMovementSpeed * ts;
 		}
 		if (Phoenix::Input::IsKeyPressed(PH_KEY_UP))
 		{
-			cameraLocation.y += cameraMovementSpeed;
+			cameraLocation.y += cameraMovementSpeed * ts;
 		}
 
 		camera->SetRotation({ 0, 0, zRotation });
@@ -190,8 +190,8 @@ public:
 		std::shared_ptr<Phoenix::VertexArray> squareVA;
 
 		float zRotation = 0;
-		float cameraRotationSpeed = 0.5;
-		float cameraMovementSpeed = 0.01;
+		float cameraRotationSpeed = 180.f;
+		float cameraMovementSpeed = 5.0f;
 		glm::vec3 cameraLocation = { 0, 0, 0 };
 };
 

@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "Events/Event.h"
+#include "Core/Timestep.h"
 
 namespace Phoenix
 {
@@ -13,7 +14,7 @@ namespace Phoenix
 
 		virtual void OnAttach() {};
 		virtual void OnDetach() {};
-		virtual void OnUpdate() {};
+		virtual void OnUpdate(Timestep ts) {};
 		virtual void OnEvent(Event& event) {};
 		virtual void OnImGuiRender() {}
 

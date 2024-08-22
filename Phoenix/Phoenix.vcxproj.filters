@@ -1367,6 +1367,7 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Phoenix\Renderer\Camera.h" />
     <ClInclude Include="src\Phoenix\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\Phoenix\Core\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phoenix\Application.cpp">

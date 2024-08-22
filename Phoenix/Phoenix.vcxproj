@@ -565,6 +565,7 @@
     <ClInclude Include="src\Phoenix.h" />
     <ClInclude Include="src\Phoenix\Application.h" />
     <ClInclude Include="src\Phoenix\Core.h" />
+    <ClInclude Include="src\Phoenix\Core\Timestep.h" />
     <ClInclude Include="src\Phoenix\EntryPoint.h" />
     <ClInclude Include="src\Phoenix\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Phoenix\Events\Event.h" />

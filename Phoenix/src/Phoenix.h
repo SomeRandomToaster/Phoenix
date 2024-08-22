@@ -18,3 +18,4 @@
 #include "Phoenix/Renderer/VertexArray.h"
 
 #include "Phoenix/EntryPoint.h"
+#include "Phoenix/Core/Timestep.h"

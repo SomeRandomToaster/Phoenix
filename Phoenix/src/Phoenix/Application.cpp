@@ -3,6 +3,9 @@
 
 #include "Renderer/Renderer.h"
 #include "Renderer/RenderCommand.h"
+#include "Core/Timestep.h"
+
+#include "GLFW/glfw3.h"
 
 namespace Phoenix {
 
@@ -24,9 +27,11 @@ namespace Phoenix {
 
 		while (isRunning) 
 		{
+			float time = glfwGetTime();
+			Timestep deltaTime = time - lastFrameTime;
 
 			for (Layer* layer : layerStack) {
-				layer->OnUpdate();
+				layer->OnUpdate(deltaTime);
 			}
 
 			imGuiLayer->Begin();
@@ -38,6 +43,8 @@ namespace Phoenix {
 			imGuiLayer->End();
 
 			window->OnUpdate();
+
+			lastFrameTime = time;
 		}
 	}
 
