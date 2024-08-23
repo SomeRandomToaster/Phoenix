@@ -18,10 +18,10 @@ public:
 
 		float squareVertices[4 * 3]
 		{
-			0.25,  0.0,  0.0,
-			0.75,  0.0,  0.0,
-			0.75,  0.5,  0.0,
-			0.25,  0.5,  0.0
+			-0.5,  -0.5,  0.0,
+			 0.5,  -0.5,  0.0,
+			 0.5,   0.5,  0.0,
+			-0.5,   0.5,  0.0
 		};
 
 		unsigned int triangleIndices[3] = { 0, 1, 2 };
@@ -99,11 +99,12 @@ public:
 
 			layout(location = 0) in vec3 a_Position;
 			
-			uniform mat4 u_ProjectionViewMatrix;			
+			uniform mat4 u_ProjectionViewMatrix;	
+			uniform mat4 u_Transform;		
 
 			void main()
 			{
-				gl_Position = u_ProjectionViewMatrix * vec4(a_Position, 1.0f);
+				gl_Position = u_ProjectionViewMatrix * u_Transform * vec4(a_Position, 1.0f);
 				v_Position = gl_Position.xyz;
 			}; 
 		)";
@@ -177,8 +178,15 @@ public:
 
 		Phoenix::Renderer::BeginScene(camera);
 
-		Phoenix::Renderer::Submit(triangleShader, triangleVA);
-		Phoenix::Renderer::Submit(squareShader, squareVA);
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				glm::mat4 squareTransform = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+				squareTransform = glm::translate(squareTransform, glm::vec3(1.1f * i, 1.1f * j, 0));
+
+				Phoenix::Renderer::Submit(squareShader, squareVA, squareTransform);
+
+			}
+		}
 
 		Phoenix::Renderer::EndScene();
 	}
@@ -192,6 +200,7 @@ public:
 		float zRotation = 0;
 		float cameraRotationSpeed = 180.f;
 		float cameraMovementSpeed = 5.0f;
+		float squareMovementSpeed = 5.0f;
 		glm::vec3 cameraLocation = { 0, 0, 0 };
 };
 
