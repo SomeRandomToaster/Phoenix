@@ -1368,6 +1368,7 @@
     <ClInclude Include="src\Phoenix\Renderer\Camera.h" />
     <ClInclude Include="src\Phoenix\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Phoenix\Core\Timestep.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Phoenix\Application.cpp">
@@ -1410,5 +1411,6 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>

@@ -11,7 +11,7 @@ namespace Phoenix
 	{
 	public:
 		static void ClearColor(const glm::vec4& color) { rendererAPI->ClearColor(color); }
-		static void DrawIndexed(const std::shared_ptr<VertexArray>& va) { rendererAPI->DrawIndexed(va); }
+		static void DrawIndexed(const Ref<VertexArray>& va) { rendererAPI->DrawIndexed(va); }
 	private:
 		static RendererAPI* rendererAPI;
 	};

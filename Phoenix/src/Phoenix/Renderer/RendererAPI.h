@@ -15,7 +15,7 @@ namespace Phoenix
 		};
 
 		virtual void ClearColor(const glm::vec4& color) = 0;
-		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& va) = 0;
+		virtual void DrawIndexed(const Ref<VertexArray>& va) = 0;
 
 		static inline API GetAPI() { return api; }
 	private:

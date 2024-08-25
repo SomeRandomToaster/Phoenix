@@ -3,11 +3,13 @@
 
 #include "RenderCommand.h"
 
+#include "Platform/OpenGL/OpenGLShader.h"
+
 namespace Phoenix
 {
 	Renderer::SceneData* Renderer::sceneData = new SceneData();
 
-	void Renderer::BeginScene(const std::shared_ptr<Camera>& camera)
+	void Renderer::BeginScene(const Ref<Camera>& camera)
 	{
 		sceneData->camera = camera;
 	}
@@ -17,11 +19,11 @@ namespace Phoenix
 
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& va, const glm::mat4& transform)
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& va, const glm::mat4& transform)
 	{
 		shader->Bind();
-		shader->SetUniformMat4("u_Transform", transform);
-		shader->SetUniformMat4("u_ProjectionViewMatrix", sceneData->camera->GetProjectionViewMatrix());
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMat4("u_Transform", transform);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMat4("u_ProjectionViewMatrix", sceneData->camera->GetProjectionViewMatrix());
 		RenderCommand::DrawIndexed(va);
 	}
 }

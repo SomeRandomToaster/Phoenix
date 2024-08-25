@@ -15,7 +15,7 @@ namespace Phoenix {
 	Application::Application() {
 		PH_CORE_ASSERT(!instance, "Application already exists!");
 		instance = this;
-		window = std::unique_ptr<Window>(Window::Create());
+		window = Scope<Window>(Window::Create());
 		window->SetEventCallback(BIND_EVENT_FUNCTION(Application::OnEvent));
 		imGuiLayer = new ImGuiLayer();
 		layerStack.PushOverlay(imGuiLayer);

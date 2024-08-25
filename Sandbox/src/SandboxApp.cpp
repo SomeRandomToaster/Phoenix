@@ -4,18 +4,14 @@
 #include "imgui.h"
 #include "glm/mat4x4.hpp"
 
+#include "Platform/OpenGL/OpenGLShader.h"
+
 class MyLayer : public Phoenix::Layer {
 public:
 	MyLayer() : Layer("MyLayer") {}
 
 	void OnAttach() override 
 	{
-		float triangleVertices[3 * 9] = {
-			-0.5, -0.5, 0.0,	0.0, 0.0,	1.0, 0.0, 0.0, 1.0,
-			 0.5, -0.5, 0.0,    1.0, 0.0,	0.0, 1.0, 0.0, 1.0,
-			 0.0,  0.5, 0.0,    0.0, 1.0,	0.0, 0.0, 1.0, 1.0
-		};
-
 		float squareVertices[4 * 3]
 		{
 			-0.5,  -0.5,  0.0,
@@ -24,78 +20,33 @@ public:
 			-0.5,   0.5,  0.0
 		};
 
-		unsigned int triangleIndices[3] = { 0, 1, 2 };
 		unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
 
-		triangleVA.reset(Phoenix::VertexArray::Create());
 		squareVA.reset(Phoenix::VertexArray::Create());
 
-		Phoenix::BufferLayout triangleVBlayout = {
-			{Phoenix::Float3, "a_Position"},
-			{Phoenix::Float2, "a_TextureCoord"},
-			{Phoenix::Float4, "a_Color"}
-		};
 		Phoenix::BufferLayout squareVBlayout = {
 			{Phoenix::Float3, "a_Position"}
 		};
 
-		std::shared_ptr<Phoenix::VertexBuffer> triangleVB;
-		std::shared_ptr<Phoenix::VertexBuffer> squareVB;
+		Ref<Phoenix::VertexBuffer> squareVB;
 
-		triangleVB.reset(Phoenix::VertexBuffer::Create(triangleVertices, triangleVBlayout.GetStride(), 3));
-		triangleVB->SetLayout(triangleVBlayout);
 
 		squareVB.reset(Phoenix::VertexBuffer::Create(squareVertices, squareVBlayout.GetStride(), 4));
 		squareVB->SetLayout(squareVBlayout);
 
-		triangleVA->AddVertexBuffer(triangleVB);
 		squareVA->AddVertexBuffer(squareVB);
 
-		std::shared_ptr<Phoenix::IndexBuffer> triangleIB;
-		std::shared_ptr<Phoenix::IndexBuffer> squareIB;
+		Ref<Phoenix::IndexBuffer> squareIB;
 
-		triangleIB.reset(Phoenix::IndexBuffer::Create(triangleIndices, 3));
 		squareIB.reset(Phoenix::IndexBuffer::Create(squareIndices, 6));
 
-		triangleVA->AddIndexBuffer(triangleIB);
 		squareVA->AddIndexBuffer(squareIB);
 
-		std::string triangleVertexShaderSrc = R"(
+		std::string solidColorVertexShaderSrc = R"(
 			#version 330 core
 
 			out vec3 v_Position;
-			out vec4 v_Color;
-
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 2) in vec4 a_Color;
-
-			uniform mat4 u_ProjectionViewMatrix;	
-
-			void main()
-			{
-				gl_Position = u_ProjectionViewMatrix * vec4(a_Position, 1.0f);
-				v_Position = gl_Position.xyz;
-				v_Color = a_Color;
-			}; 
-		)";
-		std::string triangleFragmentShaderSrc = R"(
-			#version 330 core
-
-            layout(location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-			in vec4 v_Color;
-
-			void main()
-			{
-				color = v_Color;
-			}
-		)";
-
-		std::string squareVertexShaderSrc = R"(
-			#version 330 core
-
-			out vec3 v_Position;
+			out vec3 v_Color;
 
 			layout(location = 0) in vec3 a_Position;
 			
@@ -108,21 +59,22 @@ public:
 				v_Position = gl_Position.xyz;
 			}; 
 		)";
-		std::string squareFragmentShaderSrc = R"(
+		std::string solidColorFragmentShaderSrc = R"(
 			#version 330 core
 
             layout(location = 0) out vec4 color;
 			
 			in vec3 v_Position;
 
+			uniform vec3 u_Color;
+
 			void main()
 			{
-				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+				color = vec4(u_Color, 1.0);
 			}
 		)";
 
-		triangleShader.reset(new Phoenix::Shader(triangleVertexShaderSrc, triangleFragmentShaderSrc));
-		squareShader.reset(new Phoenix::Shader(squareVertexShaderSrc, squareFragmentShaderSrc));
+		solidColorShader.reset(Phoenix::Shader::Create(solidColorVertexShaderSrc, solidColorFragmentShaderSrc));
 
 		camera.reset(new Phoenix::OrthographicCamera(-1.6, 1.6, -0.9, 0.9, -1, 1));
 	}
@@ -133,9 +85,37 @@ public:
 
 	void OnImGuiRender() override 
 	{
-		ImGui::Begin("Test window");
+		ImGui::Begin("Settings");
+		
+		static const char* items[] =
+		{
+			"Monochrome",
+			"Chess board",
+			"Stripes",
+			"Gradient"
+		};
 
-		ImGui::Text("Hello, World!");
+		ImGui::Combo("Pattern", &selectedPattern, items, 4);
+
+
+		switch (selectedPattern)
+		{
+		case Monochrome:
+			ImGui::Text("Select color");
+			ImGui::RadioButton("Color 1", &selectedColor, 0); ImGui::SameLine();
+			ImGui::RadioButton("Color 2", &selectedColor, 1);
+			break;
+		case Stripes:
+		case Gradient:
+			ImGui::Checkbox("Change direction", &patternDirection);
+			break;
+		default:
+			break;
+		}
+
+		ImGui::Text("Colors");
+		ImGui::ColorPicker3("Color1", glm::value_ptr(color1));
+		ImGui::ColorPicker3("Color2", glm::value_ptr(color2));
 
 		ImGui::End();
 
@@ -183,7 +163,37 @@ public:
 				glm::mat4 squareTransform = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 				squareTransform = glm::translate(squareTransform, glm::vec3(1.1f * i, 1.1f * j, 0));
 
-				Phoenix::Renderer::Submit(squareShader, squareVA, squareTransform);
+				solidColorShader->Bind();
+
+				switch (selectedPattern)
+				{
+				case Monochrome:
+					if(selectedColor)
+						std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", color2);
+					else
+						std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", color1);
+					break;
+				case Chessboard:
+					std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", (i + j) % 2 ? color1 : color2);
+					break;
+				case Stripes:
+					if(patternDirection)
+						std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", j % 2 ? color1 : color2);
+					else
+						std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", i % 2 ? color1 : color2);
+					break;
+				case Gradient:
+					float t;
+					if (patternDirection)
+						t = j / 10.0f;
+					else
+						t = i / 10.0f;
+					std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", t * color1 + (1 - t) * color2);
+					break;
+				}
+
+				//std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", (i + j) % 2 ? color1 : color2);
+				Phoenix::Renderer::Submit(solidColorShader, squareVA, squareTransform);
 
 			}
 		}
@@ -191,17 +201,26 @@ public:
 		Phoenix::Renderer::EndScene();
 	}
 	private:
-		std::shared_ptr<Phoenix::Camera> camera;
-		std::shared_ptr<Phoenix::Shader> triangleShader;
-		std::shared_ptr<Phoenix::Shader> squareShader;
-		std::shared_ptr<Phoenix::VertexArray> triangleVA;
-		std::shared_ptr<Phoenix::VertexArray> squareVA;
+		Ref<Phoenix::Camera> camera;
+		Ref<Phoenix::Shader> solidColorShader;
+		Ref<Phoenix::VertexArray> squareVA;
 
 		float zRotation = 0;
 		float cameraRotationSpeed = 180.f;
 		float cameraMovementSpeed = 5.0f;
 		float squareMovementSpeed = 5.0f;
 		glm::vec3 cameraLocation = { 0, 0, 0 };
+		glm::vec3 color1 = { 0.2, 0.3, 0.8 };
+		glm::vec3 color2 = { 0.8, 0.3, 0.2 };
+
+		enum Patterns
+		{
+			Monochrome, Chessboard, Stripes, Gradient
+		};
+
+		int selectedPattern = Chessboard;
+		int selectedColor = 0;
+		bool patternDirection = false;
 };
 
 class Sandbox : public Phoenix::Application {

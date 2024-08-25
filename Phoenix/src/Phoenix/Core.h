@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 
 #ifdef PH_PLATFORM_WINDOWS
 	#ifdef PH_DINAMIC_BUILD
@@ -31,3 +32,8 @@
 
 #define BIT(x) (1 << x)
 #define BIND_EVENT_FUNCTION(x) std::bind(&x, this, std::placeholders::_1)
+
+template <typename T>
+using Ref = std::shared_ptr<T>;
+template <typename T>
+using Scope = std::unique_ptr<T>;

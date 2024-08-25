@@ -27,7 +27,7 @@ namespace Phoenix {
 		inline static Application& Get() { return *instance; }
 		inline Window& GetWindow() { return *window; }
 	private:
-		std::unique_ptr<Window> window;
+		Scope<Window> window;
 
 		ImGuiLayer* imGuiLayer;
 		bool isRunning = true;

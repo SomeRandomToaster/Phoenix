@@ -20,7 +20,7 @@ namespace Phoenix
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& buffer)
+	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& buffer)
 	{
 		PH_ASSERT(buffer->GetLayout().GetElements().size(), "Vertex buffer has no layout");
 
@@ -40,7 +40,7 @@ namespace Phoenix
 		vertexBuffers.push_back(buffer);
 	}
 
-	void OpenGLVertexArray::AddIndexBuffer(const std::shared_ptr<IndexBuffer>& buffer)
+	void OpenGLVertexArray::AddIndexBuffer(const Ref<IndexBuffer>& buffer)
 	{
 		glBindVertexArray(rendererID);
 		buffer->Bind();

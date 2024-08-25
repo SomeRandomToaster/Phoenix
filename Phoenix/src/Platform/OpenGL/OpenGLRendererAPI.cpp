@@ -11,7 +11,7 @@ namespace Phoenix
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
-	void OpenGLRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& va)
+	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& va)
 	{
 		va->Bind();
 		glDrawElements(GL_TRIANGLES, va->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
