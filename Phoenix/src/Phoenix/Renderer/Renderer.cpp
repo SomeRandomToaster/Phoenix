@@ -9,6 +9,11 @@ namespace Phoenix
 {
 	Renderer::SceneData* Renderer::sceneData = new SceneData();
 
+	void Renderer::Init()
+	{
+		RenderCommand::Init();
+	}
+
 	void Renderer::BeginScene(const Ref<Camera>& camera)
 	{
 		sceneData->camera = camera;

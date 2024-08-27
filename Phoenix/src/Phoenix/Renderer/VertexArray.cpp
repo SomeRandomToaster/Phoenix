@@ -11,12 +11,12 @@ namespace Phoenix
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:
-			PH_ASSERT(false, "RendererAPI::None now is not supported");
+			PH_CORE_ASSERT(false, "RendererAPI::None now is not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexArray();
 		default:
-			PH_ASSERT(false, "Unknown RendererAPI");
+			PH_CORE_ASSERT(false, "Unknown RendererAPI");
 			return nullptr;
 		}
 	}

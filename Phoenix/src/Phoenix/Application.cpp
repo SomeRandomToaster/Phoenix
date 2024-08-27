@@ -19,6 +19,8 @@ namespace Phoenix {
 		window->SetEventCallback(BIND_EVENT_FUNCTION(Application::OnEvent));
 		imGuiLayer = new ImGuiLayer();
 		layerStack.PushOverlay(imGuiLayer);
+
+		Renderer::Init();
 	}
 	Application::~Application() {
 		

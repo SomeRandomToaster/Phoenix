@@ -17,6 +17,7 @@
 #include "Phoenix/Renderer/Renderer.h"
 #include "Phoenix/Renderer/RenderCommand.h"
 #include "Phoenix/Renderer/Shader.h"
+#include "Phoenix/Renderer/Texture.h"
 #include "Phoenix/Renderer/VertexArray.h"
 
 #include "Phoenix/EntryPoint.h"

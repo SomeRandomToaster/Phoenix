@@ -21,7 +21,7 @@ namespace Phoenix
 		case Phoenix::Int2:		return sizeof(int) * 2;
 		case Phoenix::Int3:		return sizeof(int) * 3;
 		case Phoenix::Int4:		return sizeof(int) * 4;
-		default: PH_ASSERT(false, "Unknown ShaderDataType"); return 0;
+		default: PH_CORE_ASSERT(false, "Unknown ShaderDataType"); return 0;
 		}
 	}
 
@@ -39,7 +39,7 @@ namespace Phoenix
 		case Phoenix::Int2:		return 2;
 		case Phoenix::Int3:		return 3;
 		case Phoenix::Int4:		return 4;
-		default: PH_ASSERT(false, "Unknown ShaderDataType"); return 0;
+		default: PH_CORE_ASSERT(false, "Unknown ShaderDataType"); return 0;
 		}
 	}
 
@@ -57,7 +57,7 @@ namespace Phoenix
 		case Phoenix::Int2:		return GL_INT;
 		case Phoenix::Int3:		return GL_INT;
 		case Phoenix::Int4:		return GL_INT;
-		default: PH_ASSERT(false, "Unknown ShaderDataType"); return 0;
+		default: PH_CORE_ASSERT(false, "Unknown ShaderDataType"); return 0;
 		}
 	}
 
@@ -66,12 +66,12 @@ namespace Phoenix
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:
-			PH_ASSERT(false, "RendererAPI::None now is not supported");
+			PH_CORE_ASSERT(false, "RendererAPI::None now is not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexBuffer(vertices, vertexSize, count);
 		default:
-			PH_ASSERT(false, "Unknown RendererAPI");
+			PH_CORE_ASSERT(false, "Unknown RendererAPI");
 			return nullptr;
 		}
 	}
@@ -81,12 +81,12 @@ namespace Phoenix
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:
-			PH_ASSERT(false, "RendererAPI::None now is not supported");
+			PH_CORE_ASSERT(false, "RendererAPI::None now is not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 			return new OpenGLIndexBuffer(indices, count);
 		default:
-			PH_ASSERT(false, "Unknown RendererAPI");
+			PH_CORE_ASSERT(false, "Unknown RendererAPI");
 			return nullptr;
 		}
 	}

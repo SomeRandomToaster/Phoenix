@@ -22,7 +22,7 @@ namespace Phoenix
 
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& buffer)
 	{
-		PH_ASSERT(buffer->GetLayout().GetElements().size(), "Vertex buffer has no layout");
+		PH_CORE_ASSERT(buffer->GetLayout().GetElements().size(), "Vertex buffer has no layout");
 
 		glBindVertexArray(rendererID);
 		buffer->Bind();

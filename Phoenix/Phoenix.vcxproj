@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>PH_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PH_BUILD_DLL;PH_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\imgui;lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\imgui;lib\glm;lib\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -99,7 +99,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>PH_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PH_BUILD_DLL;PH_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\imgui;lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\imgui;lib\glm;lib\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -125,7 +125,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>PH_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;PH_BUILD_DLL;PH_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\imgui;lib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;lib\spdlog\include;lib\glfw\include;lib\glad\include;lib\imgui;lib\glm;lib\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -562,6 +562,7 @@
     <ClInclude Include="lib\glm\glm\vec3.hpp" />
     <ClInclude Include="lib\glm\glm\vec4.hpp" />
     <ClInclude Include="lib\glm\glm\vector_relational.hpp" />
+    <ClInclude Include="lib\stb\stb_image.h" />
     <ClInclude Include="src\Phoenix.h" />
     <ClInclude Include="src\Phoenix\Application.h" />
     <ClInclude Include="src\Phoenix\Core.h" />
@@ -585,18 +586,21 @@
     <ClInclude Include="src\Phoenix\Renderer\Renderer.h" />
     <ClInclude Include="src\Phoenix\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Phoenix\Renderer\Shader.h" />
+    <ClInclude Include="src\Phoenix\Renderer\Texture.h" />
     <ClInclude Include="src\Phoenix\Renderer\VertexArray.h" />
     <ClInclude Include="src\Phoenix\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="lib\stb\stb_image.cpp" />
     <ClCompile Include="src\Phoenix\Application.cpp" />
     <ClCompile Include="src\Phoenix\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Phoenix\ImGui\ImGuiLayer.cpp" />
@@ -609,11 +613,13 @@
     <ClCompile Include="src\Phoenix\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Phoenix\Renderer\Texture.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />

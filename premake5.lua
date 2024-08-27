@@ -31,7 +31,9 @@ project "Phoenix"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/lib/glm/glm/**.hpp",
-		"%{prj.name}/lib/glm/glm/**.inl"
+		"%{prj.name}/lib/glm/glm/**.inl",
+		"%{prj.name}/lib/stb/**.h",
+		"%{prj.name}/lib/stb/**.cpp"
 	}
 
 	includedirs {
@@ -40,7 +42,8 @@ project "Phoenix"
 		"%{prj.name}/lib/glfw/include",
 		"%{prj.name}/lib/glad/include",
 		"%{prj.name}/lib/imgui",
-		"%{prj.name}/lib/glm"
+		"%{prj.name}/lib/glm",
+		"%{prj.name}/lib/stb",
 	}
 
 	links {

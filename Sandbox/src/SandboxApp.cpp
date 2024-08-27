@@ -12,12 +12,12 @@ public:
 
 	void OnAttach() override 
 	{
-		float squareVertices[4 * 3]
+		float squareVertices[4 * 5]
 		{
-			-0.5,  -0.5,  0.0,
-			 0.5,  -0.5,  0.0,
-			 0.5,   0.5,  0.0,
-			-0.5,   0.5,  0.0
+			-0.5,  -0.5,  0.0, 0.0, 0.0,
+			 0.5,  -0.5,  0.0, 1.0, 0.0,
+			 0.5,   0.5,  0.0, 1.0, 1.0,
+			-0.5,   0.5,  0.0, 0.0, 1.0
 		};
 
 		unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
@@ -25,7 +25,8 @@ public:
 		squareVA.reset(Phoenix::VertexArray::Create());
 
 		Phoenix::BufferLayout squareVBlayout = {
-			{Phoenix::Float3, "a_Position"}
+			{Phoenix::Float3, "a_Position"},
+			{Phoenix::Float2, "a_TexCoord"}
 		};
 
 		Ref<Phoenix::VertexBuffer> squareVB;
@@ -74,7 +75,46 @@ public:
 			}
 		)";
 
+		std::string textureVertexShaderSrc = R"(
+			#version 330 core
+
+			out vec3 v_Position;
+			out vec2 v_TexCoord;
+
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+			
+			uniform mat4 u_ProjectionViewMatrix;	
+			uniform mat4 u_Transform;		
+
+			void main()
+			{
+				gl_Position = u_ProjectionViewMatrix * u_Transform * vec4(a_Position, 1.0f);
+				v_Position = gl_Position.xyz;
+				v_TexCoord = a_TexCoord;
+			}; 
+		)";
+		std::string textureFragmentShaderSrc = R"(
+			#version 330 core
+
+            layout(location = 0) out vec4 color;
+			
+			in vec3 v_Position;
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		texture = Phoenix::Texture2D::Create("assets/textures/checkerboard.png");
+		lunaTexture = Phoenix::Texture2D::Create("assets/textures/luna.png");
+
 		solidColorShader.reset(Phoenix::Shader::Create(solidColorVertexShaderSrc, solidColorFragmentShaderSrc));
+		textureShader.reset(Phoenix::Shader::Create(textureVertexShaderSrc, textureFragmentShaderSrc));
 
 		camera.reset(new Phoenix::OrthographicCamera(-1.6, 1.6, -0.9, 0.9, -1, 1));
 	}
@@ -85,39 +125,6 @@ public:
 
 	void OnImGuiRender() override 
 	{
-		ImGui::Begin("Settings");
-		
-		static const char* items[] =
-		{
-			"Monochrome",
-			"Chess board",
-			"Stripes",
-			"Gradient"
-		};
-
-		ImGui::Combo("Pattern", &selectedPattern, items, 4);
-
-
-		switch (selectedPattern)
-		{
-		case Monochrome:
-			ImGui::Text("Select color");
-			ImGui::RadioButton("Color 1", &selectedColor, 0); ImGui::SameLine();
-			ImGui::RadioButton("Color 2", &selectedColor, 1);
-			break;
-		case Stripes:
-		case Gradient:
-			ImGui::Checkbox("Change direction", &patternDirection);
-			break;
-		default:
-			break;
-		}
-
-		ImGui::Text("Colors");
-		ImGui::ColorPicker3("Color1", glm::value_ptr(color1));
-		ImGui::ColorPicker3("Color2", glm::value_ptr(color2));
-
-		ImGui::End();
 
 	}
 
@@ -158,69 +165,27 @@ public:
 
 		Phoenix::Renderer::BeginScene(camera);
 
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				glm::mat4 squareTransform = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
-				squareTransform = glm::translate(squareTransform, glm::vec3(1.1f * i, 1.1f * j, 0));
-
-				solidColorShader->Bind();
-
-				switch (selectedPattern)
-				{
-				case Monochrome:
-					if(selectedColor)
-						std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", color2);
-					else
-						std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", color1);
-					break;
-				case Chessboard:
-					std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", (i + j) % 2 ? color1 : color2);
-					break;
-				case Stripes:
-					if(patternDirection)
-						std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", j % 2 ? color1 : color2);
-					else
-						std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", i % 2 ? color1 : color2);
-					break;
-				case Gradient:
-					float t;
-					if (patternDirection)
-						t = j / 10.0f;
-					else
-						t = i / 10.0f;
-					std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", t * color1 + (1 - t) * color2);
-					break;
-				}
-
-				//std::dynamic_pointer_cast<Phoenix::OpenGLShader>(solidColorShader)->SetUniformFloat3("u_Color", (i + j) % 2 ? color1 : color2);
-				Phoenix::Renderer::Submit(solidColorShader, squareVA, squareTransform);
-
-			}
-		}
+		std::dynamic_pointer_cast<Phoenix::OpenGLShader>(textureShader)->SetUniformInt("u_Texture", 0);
+		texture->Bind();
+		Phoenix::Renderer::Submit(textureShader, squareVA);
+		lunaTexture->Bind();
+		Phoenix::Renderer::Submit(textureShader, squareVA);
 
 		Phoenix::Renderer::EndScene();
 	}
 	private:
 		Ref<Phoenix::Camera> camera;
 		Ref<Phoenix::Shader> solidColorShader;
+		Ref<Phoenix::Shader> textureShader;
 		Ref<Phoenix::VertexArray> squareVA;
 
 		float zRotation = 0;
 		float cameraRotationSpeed = 180.f;
 		float cameraMovementSpeed = 5.0f;
-		float squareMovementSpeed = 5.0f;
 		glm::vec3 cameraLocation = { 0, 0, 0 };
-		glm::vec3 color1 = { 0.2, 0.3, 0.8 };
-		glm::vec3 color2 = { 0.8, 0.3, 0.2 };
-
-		enum Patterns
-		{
-			Monochrome, Chessboard, Stripes, Gradient
-		};
-
-		int selectedPattern = Chessboard;
-		int selectedColor = 0;
-		bool patternDirection = false;
+		
+		Ref<Phoenix::Texture2D> texture;
+		Ref<Phoenix::Texture2D> lunaTexture;
 };
 
 class Sandbox : public Phoenix::Application {
