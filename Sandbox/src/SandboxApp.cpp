@@ -14,10 +14,10 @@ public:
 	{
 		float squareVertices[4 * 5]
 		{
-			-0.5,  -0.5,  0.0, 0.0, 0.0,
-			 0.5,  -0.5,  0.0, 1.0, 0.0,
-			 0.5,   0.5,  0.0, 1.0, 1.0,
-			-0.5,   0.5,  0.0, 0.0, 1.0
+			-1.0,  -1.0,  0.0, 0.0, 0.0,
+			 1.0,  -1.0,  0.0, 1.0, 0.0,
+			 1.0,   1.0,  0.0, 1.0, 1.0,
+			-1.0,   1.0,  0.0, 0.0, 1.0
 		};
 
 		unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
@@ -43,78 +43,11 @@ public:
 
 		squareVA->AddIndexBuffer(squareIB);
 
-		std::string solidColorVertexShaderSrc = R"(
-			#version 330 core
-
-			out vec3 v_Position;
-			out vec3 v_Color;
-
-			layout(location = 0) in vec3 a_Position;
-			
-			uniform mat4 u_ProjectionViewMatrix;	
-			uniform mat4 u_Transform;		
-
-			void main()
-			{
-				gl_Position = u_ProjectionViewMatrix * u_Transform * vec4(a_Position, 1.0f);
-				v_Position = gl_Position.xyz;
-			}; 
-		)";
-		std::string solidColorFragmentShaderSrc = R"(
-			#version 330 core
-
-            layout(location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-
-			uniform vec3 u_Color;
-
-			void main()
-			{
-				color = vec4(u_Color, 1.0);
-			}
-		)";
-
-		std::string textureVertexShaderSrc = R"(
-			#version 330 core
-
-			out vec3 v_Position;
-			out vec2 v_TexCoord;
-
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
-			
-			uniform mat4 u_ProjectionViewMatrix;	
-			uniform mat4 u_Transform;		
-
-			void main()
-			{
-				gl_Position = u_ProjectionViewMatrix * u_Transform * vec4(a_Position, 1.0f);
-				v_Position = gl_Position.xyz;
-				v_TexCoord = a_TexCoord;
-			}; 
-		)";
-		std::string textureFragmentShaderSrc = R"(
-			#version 330 core
-
-            layout(location = 0) out vec4 color;
-			
-			in vec3 v_Position;
-			in vec2 v_TexCoord;
-
-			uniform sampler2D u_Texture;
-
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}
-		)";
+		solidColorShader.reset(Phoenix::Shader::Create("assets/shaders/flatColor.shader"));
+		textureShader.reset(Phoenix::Shader::Create("assets/shaders/texture.shader"));
+		rayTracingShader.reset(Phoenix::Shader::Create("assets/shaders/rayTracing.shader"));
 
 		texture = Phoenix::Texture2D::Create("assets/textures/checkerboard.png");
-		lunaTexture = Phoenix::Texture2D::Create("assets/textures/luna.png");
-
-		solidColorShader.reset(Phoenix::Shader::Create(solidColorVertexShaderSrc, solidColorFragmentShaderSrc));
-		textureShader.reset(Phoenix::Shader::Create(textureVertexShaderSrc, textureFragmentShaderSrc));
 
 		camera.reset(new Phoenix::OrthographicCamera(-1.6, 1.6, -0.9, 0.9, -1, 1));
 	}
@@ -125,12 +58,20 @@ public:
 
 	void OnImGuiRender() override 
 	{
+		ImGui::Begin("Info");
 
+		ImGui::Text("Last frame time: ");
+		ImGui::Text(std::to_string(lastFrameTimeMillis).c_str());
+		ImGui::Text("FPS: ");
+		ImGui::Text(std::to_string(int(1e3 / lastFrameTimeMillis)).c_str());
+
+		ImGui::End();
 	}
 
 	void OnUpdate(Phoenix::Timestep ts) override 
 	{
-		
+		lastFrameTimeMillis = ts.GetMilliseconds();
+
 		if (Phoenix::Input::IsKeyPressed(PH_KEY_A))
 		{
 			zRotation += cameraRotationSpeed * ts;
@@ -165,10 +106,8 @@ public:
 
 		Phoenix::Renderer::BeginScene(camera);
 
-		std::dynamic_pointer_cast<Phoenix::OpenGLShader>(textureShader)->SetUniformInt("u_Texture", 0);
 		texture->Bind();
-		Phoenix::Renderer::Submit(textureShader, squareVA);
-		lunaTexture->Bind();
+		std::dynamic_pointer_cast<Phoenix::OpenGLShader>(textureShader)->SetUniformInt("u_Texture", 0);
 		Phoenix::Renderer::Submit(textureShader, squareVA);
 
 		Phoenix::Renderer::EndScene();
@@ -177,15 +116,16 @@ public:
 		Ref<Phoenix::Camera> camera;
 		Ref<Phoenix::Shader> solidColorShader;
 		Ref<Phoenix::Shader> textureShader;
+		Ref<Phoenix::Shader> rayTracingShader;
 		Ref<Phoenix::VertexArray> squareVA;
+		Ref<Phoenix::Texture2D> texture;
 
 		float zRotation = 0;
 		float cameraRotationSpeed = 180.f;
 		float cameraMovementSpeed = 5.0f;
 		glm::vec3 cameraLocation = { 0, 0, 0 };
-		
-		Ref<Phoenix::Texture2D> texture;
-		Ref<Phoenix::Texture2D> lunaTexture;
+
+		float lastFrameTimeMillis;
 };
 
 class Sandbox : public Phoenix::Application {

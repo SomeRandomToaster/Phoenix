@@ -8,6 +8,7 @@ namespace Phoenix
 	{
 	public:
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& path);
 		~OpenGLShader();
 
 		void Bind() const override;
@@ -23,6 +24,11 @@ namespace Phoenix
 		void SetUniformInt2(const std::string& name, const glm::i32vec2& vector);
 		void SetUniformInt3(const std::string& name, const glm::i32vec3& vector);
 		void SetUniformInt4(const std::string& name, const glm::i32vec4& vector);
+	private:
+		std::string ReadFile(const std::string& path);
+		std::unordered_map<unsigned int, std::string> ParseFileContents(const std::string& contents);
+		unsigned int GetOpenGLShaderType(const std::string& type);
+		void Compile(const std::unordered_map<unsigned int, std::string>& source);
 	private:
 		unsigned int programID;
 	};
