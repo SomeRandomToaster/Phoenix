@@ -8,12 +8,24 @@ namespace Phoenix
 {
 	OpenGLShader::OpenGLShader(const std::string& path)
 	{
+		namespace fs = std::filesystem;
+		name = fs::path(path).stem().string();
+
 		std::string fileContents = ReadFile(path);
 		std::unordered_map<GLenum, std::string> source = ParseFileContents(fileContents);
 		Compile(source);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& path, const std::string& name)
+		: name(name)
+	{
+		std::string fileContents = ReadFile(path);
+		std::unordered_map<GLenum, std::string> source = ParseFileContents(fileContents);
+		Compile(source);
+	}
+
+	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& name)
+		: name(name)
 	{
 		std::unordered_map<GLenum, std::string> source;
 		source[GL_VERTEX_SHADER] = vertexSrc;

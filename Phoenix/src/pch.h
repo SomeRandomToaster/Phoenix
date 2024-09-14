@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <memory.h>
+#include <filesystem>
 
 #include <sstream>
 #include <string>

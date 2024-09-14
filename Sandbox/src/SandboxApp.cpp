@@ -43,9 +43,11 @@ public:
 
 		squareVA->AddIndexBuffer(squareIB);
 
-		solidColorShader.reset(Phoenix::Shader::Create("assets/shaders/flatColor.shader"));
-		textureShader.reset(Phoenix::Shader::Create("assets/shaders/texture.shader"));
-		rayTracingShader.reset(Phoenix::Shader::Create("assets/shaders/rayTracing.shader"));
+		shaderLibrary.Load("assets/shaders/flatColor.shader");
+		shaderLibrary.Load("assets/shaders/texture.shader");
+		shaderLibrary.Load("assets/shaders/rayTracing.shader");
+
+		textureShader = shaderLibrary.Get("texture");
 
 		texture = Phoenix::Texture2D::Create("assets/textures/checkerboard.png");
 
@@ -114,9 +116,8 @@ public:
 	}
 	private:
 		Ref<Phoenix::Camera> camera;
-		Ref<Phoenix::Shader> solidColorShader;
+		Phoenix::ShaderLibrary shaderLibrary;
 		Ref<Phoenix::Shader> textureShader;
-		Ref<Phoenix::Shader> rayTracingShader;
 		Ref<Phoenix::VertexArray> squareVA;
 		Ref<Phoenix::Texture2D> texture;
 

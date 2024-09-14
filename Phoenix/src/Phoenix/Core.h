@@ -22,8 +22,8 @@
 
 
 #ifdef PH_ENABLE_ASSERTS
-	#define PH_CORE_ASSERT(x, ...) if(!x) {PH_CORE_ERROR(__VA_ARGS__); __debugbreak();}
-	#define PH_ASSERT(x, ...) if(!x) {PH_ERROR(__VA_ARGS__); __debugbreak();}
+	#define PH_CORE_ASSERT(x, ...) if(!(x)) {PH_CORE_ERROR(__VA_ARGS__); __debugbreak();}
+	#define PH_ASSERT(x, ...) if(!(x)) {PH_ERROR(__VA_ARGS__); __debugbreak();}
 #else
 	#define PH_CORE_ASSERT(x, ...)
 	#define PH_ASSERT(x, ...)

@@ -7,12 +7,14 @@ namespace Phoenix
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& name);
+		OpenGLShader(const std::string& path, const std::string& name);
 		OpenGLShader(const std::string& path);
 		~OpenGLShader();
 
 		void Bind() const override;
 		void Unbind() const override;
+		const std::string& GetName() const override { return name; }
 
 		void SetUniformFloat(const std::string& name, float value);
 		void SetUniformFloat2(const std::string& name, const glm::vec2& vector);
@@ -31,5 +33,6 @@ namespace Phoenix
 		void Compile(const std::unordered_map<unsigned int, std::string>& source);
 	private:
 		unsigned int programID;
+		std::string name;
 	};
 }
