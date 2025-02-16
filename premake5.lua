@@ -97,7 +97,8 @@ project "Sandbox"
 		"Phoenix/lib/spdlog/include",
 		"Phoenix/src",
 		"Phoenix/lib/glm",
-		"Phoenix/lib/imgui"
+		"Phoenix/lib/imgui",
+		"%{prj.name}/src"
 	}
 
 	links {

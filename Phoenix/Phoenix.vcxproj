@@ -580,6 +580,7 @@
     <ClInclude Include="src\Phoenix\Log.h" />
     <ClInclude Include="src\Phoenix\Renderer\Buffer.h" />
     <ClInclude Include="src\Phoenix\Renderer\Camera.h" />
+    <ClInclude Include="src\Phoenix\Renderer\Framebuffer.h" />
     <ClInclude Include="src\Phoenix\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Phoenix\Renderer\OrthographicCamera.h" />
     <ClInclude Include="src\Phoenix\Renderer\RenderCommand.h" />
@@ -591,6 +592,7 @@
     <ClInclude Include="src\Phoenix\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
@@ -608,6 +610,7 @@
     <ClCompile Include="src\Phoenix\LayerStack.cpp" />
     <ClCompile Include="src\Phoenix\Log.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Phoenix\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\Renderer.cpp" />
@@ -617,6 +620,7 @@
     <ClCompile Include="src\Phoenix\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />

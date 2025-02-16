@@ -3,6 +3,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "imgui.h"
 
 #include "Phoenix/Application.h"
 #include "Phoenix/Log.h"
@@ -19,6 +20,11 @@
 #include "Phoenix/Renderer/Shader.h"
 #include "Phoenix/Renderer/Texture.h"
 #include "Phoenix/Renderer/VertexArray.h"
+#include "Phoenix/Renderer/Framebuffer.h"
 
-#include "Phoenix/EntryPoint.h"
 #include "Phoenix/Core/Timestep.h"
+
+#ifdef PH_INCLUDE_MAIN
+	#include "Phoenix/EntryPoint.h"
+#endif // PH_INCLUDE_MAIN
+

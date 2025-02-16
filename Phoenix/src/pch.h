@@ -10,6 +10,7 @@
 #include <functional>
 #include <memory.h>
 #include <filesystem>
+#include <cmath>
 
 #include <sstream>
 #include <string>

@@ -18,6 +18,8 @@ namespace Phoenix {
 
 		void Run();
 
+		void Close();
+
 		void OnEvent(Event& event);
 		bool OnWindowClose(WindowCloseEvent& event);
 

@@ -80,4 +80,10 @@ namespace Phoenix {
 	{
 		layerStack.PushOverlay(layer);
 	}
+
+	void Application::Close()
+	{
+		isRunning = false;
+	}
 }
+

@@ -21,7 +21,7 @@ in vec2 v_FragCoord;
 
 
 float focalLength = 2.0;
-float aspectRatio = 16.0 / 9.0;
+float aspectRatio = 950.0 / 650.0;
 float viewportHeight = 2.0;
 vec3 cameraLocation = vec3(0, 0, 0);
 
