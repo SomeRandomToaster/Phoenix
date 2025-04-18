@@ -12,7 +12,7 @@ namespace Phoenix
 	{
 	public:
 		static void Init();
-		static void BeginScene(const Ref<Camera>& camera);
+		static void BeginScene(const Camera& camera);
 		static void EndScene();
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& va, const glm::mat4& transform = glm::mat4(1.0f));
 
@@ -20,7 +20,7 @@ namespace Phoenix
 	private:
 		struct SceneData
 		{
-			Ref<Camera> camera;
+			const Camera* camera;
 		};
 		static SceneData* sceneData;
 	};

@@ -24,6 +24,8 @@
 
 #include "Phoenix/Core/Timestep.h"
 
+#include "Phoenix/OrthographicCameraController.h"
+
 #ifdef PH_INCLUDE_MAIN
 	#include "Phoenix/EntryPoint.h"
 #endif // PH_INCLUDE_MAIN

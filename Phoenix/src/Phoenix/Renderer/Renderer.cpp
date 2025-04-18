@@ -14,9 +14,9 @@ namespace Phoenix
 		RenderCommand::Init();
 	}
 
-	void Renderer::BeginScene(const Ref<Camera>& camera)
+	void Renderer::BeginScene(const Camera& camera)
 	{
-		sceneData->camera = camera;
+		sceneData->camera = &camera;
 	}
 
 	void Renderer::EndScene()

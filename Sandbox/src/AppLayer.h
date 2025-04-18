@@ -5,23 +5,15 @@
 class AppLayer : public Phoenix::Layer
 {
 private:
-	unsigned viewportResolutionX = 1120;
-	unsigned viewportResolutionY = 630;
 
-	Ref<Phoenix::Framebuffer> viewportFramebuffer;
 	Ref<Phoenix::VertexArray> squareVA;
 	Phoenix::ShaderLibrary shaderLibrary;
 	Ref<Phoenix::Shader> flatColorShader;
-	Ref<Phoenix::OrthographicCamera> camera;
 
-	float zRotation = 0;
-	float cameraRotationSpeed = 180.f;
-	float cameraMovementSpeed = 5.0f;
-	float squareMovementSpeed = 5.0f;
-	glm::vec3 cameraLocation = { 0, 0, 0 };
 	glm::vec3 color1 = { 0.2, 0.3, 0.8 };
 	glm::vec3 color2 = { 0.8, 0.3, 0.2 };
 
+	Phoenix::OrthographicCameraController cameraController{1280.f / 720.f};
 
 	enum Patterns
 	{
@@ -33,11 +25,6 @@ private:
 public:
 	void OnAttach() override
 	{
-		Phoenix::FramebufferProps props;
-		props.Width = 1280;
-		props.Height = 720;
-		viewportFramebuffer = Phoenix::Framebuffer::Create(props);
-
 		float squareVertices[4 * 3]
 		{
 			-1.0,  -1.0,  0.0,
@@ -70,18 +57,11 @@ public:
 
 		shaderLibrary.Load("assets/shaders/flatColor.shader");
 		flatColorShader = shaderLibrary.Get("flatColor");
-
-		camera.reset(new Phoenix::OrthographicCamera(-1.6, 1.6, -0.9, 0.9, -1, 1));
 	}
 
 	void OnImGuiRender() override
 	{
-        SetupDockspace();
-        DrawMenuBar();
 		DrawSettingsWindow();
-		DrawViewportWindow();
-
-		ImGui::End();
 	}
 
 	void OnDetach() override
@@ -90,12 +70,10 @@ public:
 	}
 
 	void OnUpdate(Phoenix::Timestep ts) override;
+	void OnEvent(Phoenix::Event& e) override;
 
 	
 private:
-    void SetupDockspace();
-    void DrawMenuBar();
     void DrawSettingsWindow();
-	void DrawViewportWindow();
 
 };

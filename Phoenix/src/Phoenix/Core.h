@@ -31,7 +31,7 @@
 
 
 #define BIT(x) (1 << x)
-#define BIND_EVENT_FUNCTION(x) std::bind(&x, this, std::placeholders::_1)
+#define PH_BIND_EVENT_FUNCTION(x) std::bind(&x, this, std::placeholders::_1)
 
 template <typename T>
 using Ref = std::shared_ptr<T>;

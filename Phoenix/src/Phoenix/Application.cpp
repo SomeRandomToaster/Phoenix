@@ -16,7 +16,7 @@ namespace Phoenix {
 		PH_CORE_ASSERT(!instance, "Application already exists!");
 		instance = this;
 		window = Scope<Window>(Window::Create());
-		window->SetEventCallback(BIND_EVENT_FUNCTION(Application::OnEvent));
+		window->SetEventCallback(PH_BIND_EVENT_FUNCTION(Application::OnEvent));
 		imGuiLayer = new ImGuiLayer();
 		layerStack.PushOverlay(imGuiLayer);
 
@@ -53,7 +53,7 @@ namespace Phoenix {
 	void Application::OnEvent(Event& event) 
 	{
 		EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FUNCTION(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowCloseEvent>(PH_BIND_EVENT_FUNCTION(Application::OnWindowClose));
 
 		for (auto it = layerStack.end(); it != layerStack.begin();)
 		{

@@ -15,6 +15,8 @@ namespace Phoenix
 		void SetRotation(const glm::vec3& rotation) override;
 		const glm::vec3& GetRotation() const override { return rotation; }
 
+		void SetProjection(float left, float right, float bottom, float top, float zNear, float zFar);
+
 		const glm::mat4& GetProjectionMatrix() const override { return projectionMatrix; }
 		const glm::mat4& GetViewMatrix() const override { return viewMatrix; }
 		const glm::mat4& GetProjectionViewMatrix() const { return projectionViewMatrix; }

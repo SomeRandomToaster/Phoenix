@@ -39,107 +39,12 @@ void AppLayer::DrawSettingsWindow()
 }
 
 
-void AppLayer::DrawViewportWindow()
-{
-    ImGui::Begin("Viewport");
-
-
-
-    uint32_t id = viewportFramebuffer->GetColorAttachmentRendererID();
-    ImGui::Image((void*)id, ImVec2(viewportResolutionX, viewportResolutionY));
-    ImGui::End();
-}
-
-
-void AppLayer::DrawMenuBar()
-{
-    if (ImGui::BeginMenuBar())
-    {
-        if (ImGui::BeginMenu("Options"))
-        {
-            if (ImGui::MenuItem("Exit")) {
-                Phoenix::Application::Get().Close();
-            }
-
-            ImGui::EndMenu();
-        }
-
-        ImGui::EndMenuBar();
-    }
-}
-
-
-void AppLayer::SetupDockspace()
-{
-    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-
-    const ImGuiViewport* viewport = ImGui::GetMainViewport();
-    ImGui::SetNextWindowPos(viewport->WorkPos);
-    ImGui::SetNextWindowSize(viewport->WorkSize);
-    ImGui::SetNextWindowViewport(viewport->ID);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-
-    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-        window_flags |= ImGuiWindowFlags_NoBackground;
-
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-    bool open = true;
-    bool* p_open = &open;
-    ImGui::Begin("Fluid Viewport", p_open, window_flags);
-
-    ImGui::PopStyleVar();
-
-    ImGui::PopStyleVar(2);
-
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-    {
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-    }
-
-    
-}
-
-
 void AppLayer::OnUpdate(Phoenix::Timestep ts)
 {
-    if (Phoenix::Input::IsKeyPressed(PH_KEY_A))
-    {
-        zRotation += cameraRotationSpeed * ts;
-    }
-    if (Phoenix::Input::IsKeyPressed(PH_KEY_D))
-    {
-        zRotation -= cameraRotationSpeed * ts;
-    }
+    cameraController.OnUpdate(ts);
 
-    if (Phoenix::Input::IsKeyPressed(PH_KEY_LEFT))
-    {
-        cameraLocation.x -= cameraMovementSpeed * ts;
-    }
-    if (Phoenix::Input::IsKeyPressed(PH_KEY_RIGHT))
-    {
-        cameraLocation.x += cameraMovementSpeed * ts;
-    }
-    if (Phoenix::Input::IsKeyPressed(PH_KEY_DOWN))
-    {
-        cameraLocation.y -= cameraMovementSpeed * ts;
-    }
-    if (Phoenix::Input::IsKeyPressed(PH_KEY_UP))
-    {
-        cameraLocation.y += cameraMovementSpeed * ts;
-    }
-
-    camera->SetRotation({ 0, 0, zRotation });
-    camera->SetLocation(cameraLocation);
-
-    viewportFramebuffer->Bind();
     Phoenix::RenderCommand::ClearColor(glm::vec4(0.1, 0.1, 0.1, 1.0));
-    Phoenix::Renderer::BeginScene(camera);
+    Phoenix::Renderer::BeginScene(cameraController.GetCamera());
 
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 10; j++) {
@@ -178,6 +83,9 @@ void AppLayer::OnUpdate(Phoenix::Timestep ts)
     }
 
     Phoenix::Renderer::EndScene();
-    viewportFramebuffer->Unbind();
 }
 
+void AppLayer::OnEvent(Phoenix::Event& e)
+{
+    cameraController.OnEvent(e);
+}

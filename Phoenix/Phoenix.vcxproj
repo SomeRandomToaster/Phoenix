@@ -578,6 +578,7 @@
     <ClInclude Include="src\Phoenix\Layer.h" />
     <ClInclude Include="src\Phoenix\LayerStack.h" />
     <ClInclude Include="src\Phoenix\Log.h" />
+    <ClInclude Include="src\Phoenix\OrthographicCameraController.h" />
     <ClInclude Include="src\Phoenix\Renderer\Buffer.h" />
     <ClInclude Include="src\Phoenix\Renderer\Camera.h" />
     <ClInclude Include="src\Phoenix\Renderer\Framebuffer.h" />
@@ -609,6 +610,7 @@
     <ClCompile Include="src\Phoenix\Layer.cpp" />
     <ClCompile Include="src\Phoenix\LayerStack.cpp" />
     <ClCompile Include="src\Phoenix\Log.cpp" />
+    <ClCompile Include="src\Phoenix\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\Framebuffer.cpp" />
     <ClCompile Include="src\Phoenix\Renderer\OrthographicCamera.cpp" />
