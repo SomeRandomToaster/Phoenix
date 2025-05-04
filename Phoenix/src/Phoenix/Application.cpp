@@ -32,8 +32,10 @@ namespace Phoenix {
 			float time = glfwGetTime();
 			Timestep deltaTime = time - lastFrameTime;
 
-			for (Layer* layer : layerStack) {
-				layer->OnUpdate(deltaTime);
+			if (!isMinimized) {
+				for (Layer* layer : layerStack) {
+					layer->OnUpdate(deltaTime);
+				}
 			}
 
 			imGuiLayer->Begin();
@@ -54,6 +56,7 @@ namespace Phoenix {
 	{
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(PH_BIND_EVENT_FUNCTION(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(PH_BIND_EVENT_FUNCTION(Application::OnWindowResize));
 
 		for (auto it = layerStack.end(); it != layerStack.begin();)
 		{
@@ -70,6 +73,18 @@ namespace Phoenix {
 	{
 		isRunning = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& event)
+	{
+		if(event.GetWidth() == 0 || event.GetHeight() == 0) {
+			isMinimized = true;
+		}
+		else {
+			isMinimized = false;
+		}
+		Renderer::OnWindowResize(event.GetWidth(), event.GetHeight());
+		return false;
 	}
 
 	void Application::PushLayer(Layer* layer)

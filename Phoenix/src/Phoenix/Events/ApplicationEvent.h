@@ -10,7 +10,7 @@ namespace Phoenix {
 		WindowResizeEvent(unsigned int width, unsigned int height)
 			: width(width), height(height) {}
 
-		inline unsigned int GetWidth() const { return height; }
+		inline unsigned int GetWidth() const { return width; }
 		inline unsigned int GetHeight() const { return height; }
 
 		std::string ToString() const override

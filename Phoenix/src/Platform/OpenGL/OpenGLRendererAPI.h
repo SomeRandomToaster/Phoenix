@@ -10,5 +10,6 @@ namespace Phoenix
 		void Init() override;
 		void ClearColor(const glm::vec4& color) override;
 		void DrawIndexed(const Ref<VertexArray>& va) override;
+		void SetViewport(unsigned x, unsigned y, unsigned width, unsigned height) override;
 	};
 }

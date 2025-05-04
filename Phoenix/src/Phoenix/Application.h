@@ -22,6 +22,7 @@ namespace Phoenix {
 
 		void OnEvent(Event& event);
 		bool OnWindowClose(WindowCloseEvent& event);
+		bool OnWindowResize(WindowResizeEvent& event);
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
@@ -33,6 +34,7 @@ namespace Phoenix {
 
 		ImGuiLayer* imGuiLayer;
 		bool isRunning = true;
+		bool isMinimized = false;
 		LayerStack layerStack;
 
 		float lastFrameTime = 0.0f;

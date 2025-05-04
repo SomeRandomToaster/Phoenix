@@ -31,4 +31,9 @@ namespace Phoenix
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMat4("u_ProjectionViewMatrix", sceneData->camera->GetProjectionViewMatrix());
 		RenderCommand::DrawIndexed(va);
 	}
+
+	void Renderer::OnWindowResize(unsigned width, unsigned height)
+	{
+		RenderCommand::SetViewport(0, 0, width, height);
+	}
 }
