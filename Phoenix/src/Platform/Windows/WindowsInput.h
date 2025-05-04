@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Phoenix/Input.h"
+#include "Phoenix/Core/Input.h"
 
 namespace Phoenix
 {

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "OrthographicCameraController.h"
 
-#include "Phoenix/Input.h"
+#include "Phoenix/Core/Input.h"
 
 namespace Phoenix
 {

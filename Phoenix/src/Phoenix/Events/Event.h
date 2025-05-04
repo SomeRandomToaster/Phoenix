@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Phoenix/Core.h"
+#include "Phoenix/Core/Core.h"
 
 
 namespace Phoenix {

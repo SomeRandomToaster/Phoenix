@@ -5,10 +5,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "imgui.h"
 
-#include "Phoenix/Application.h"
-#include "Phoenix/Log.h"
-#include "Phoenix/Layer.h"
-#include "Phoenix/Input.h"
+#include "Phoenix/Core/Application.h"
+#include "Phoenix/Core/Log.h"
+#include "Phoenix/Core/Layer.h"
+#include "Phoenix/Core/Input.h"
 
 #include "Phoenix/ImGui/ImGuiLayer.h"
 
@@ -24,9 +24,9 @@
 
 #include "Phoenix/Core/Timestep.h"
 
-#include "Phoenix/OrthographicCameraController.h"
+#include "Phoenix/Renderer/OrthographicCameraController.h"
 
 #ifdef PH_INCLUDE_MAIN
-	#include "Phoenix/EntryPoint.h"
+	#include "Phoenix/Core/EntryPoint.h"
 #endif // PH_INCLUDE_MAIN
 

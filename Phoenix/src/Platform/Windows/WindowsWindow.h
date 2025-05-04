@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Phoenix/Window.h"
+#include "Phoenix/Core/Window.h"
 #include "Phoenix/Renderer/GraphicsContext.h"
 
 struct GLFWwindow;

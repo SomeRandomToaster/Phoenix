@@ -1308,17 +1308,35 @@
     <ClInclude Include="src\Phoenix.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\Application.h">
-      <Filter>src\Phoenix</Filter>
+    <ClInclude Include="src\Phoenix\Core\Application.h">
+      <Filter>src\Phoenix\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\Core.h">
-      <Filter>src\Phoenix</Filter>
+    <ClInclude Include="src\Phoenix\Core\Core.h">
+      <Filter>src\Phoenix\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Core\EntryPoint.h">
+      <Filter>src\Phoenix\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Core\Input.h">
+      <Filter>src\Phoenix\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Core\KeyCodes.h">
+      <Filter>src\Phoenix\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Core\Layer.h">
+      <Filter>src\Phoenix\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Core\LayerStack.h">
+      <Filter>src\Phoenix\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Core\Log.h">
+      <Filter>src\Phoenix\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Phoenix\Core\Timestep.h">
       <Filter>src\Phoenix\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\EntryPoint.h">
-      <Filter>src\Phoenix</Filter>
+    <ClInclude Include="src\Phoenix\Core\Window.h">
+      <Filter>src\Phoenix\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Phoenix\Events\ApplicationEvent.h">
       <Filter>src\Phoenix\Events</Filter>
@@ -1335,31 +1353,22 @@
     <ClInclude Include="src\Phoenix\ImGui\ImGuiLayer.h">
       <Filter>src\Phoenix\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\Input.h">
-      <Filter>src\Phoenix</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Phoenix\KeyCodes.h">
-      <Filter>src\Phoenix</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Phoenix\Layer.h">
-      <Filter>src\Phoenix</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Phoenix\LayerStack.h">
-      <Filter>src\Phoenix</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Phoenix\Log.h">
-      <Filter>src\Phoenix</Filter>
-    </ClInclude>
     <ClInclude Include="src\Phoenix\Renderer\Buffer.h">
       <Filter>src\Phoenix\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Phoenix\Renderer\Camera.h">
       <Filter>src\Phoenix\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Phoenix\Renderer\Framebuffer.h">
+      <Filter>src\Phoenix\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Phoenix\Renderer\GraphicsContext.h">
       <Filter>src\Phoenix\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Phoenix\Renderer\OrthographicCamera.h">
+      <Filter>src\Phoenix\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Phoenix\Renderer\OrthographicCameraController.h">
       <Filter>src\Phoenix\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Phoenix\Renderer\RenderCommand.h">
@@ -1380,13 +1389,13 @@
     <ClInclude Include="src\Phoenix\Renderer\VertexArray.h">
       <Filter>src\Phoenix\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\Window.h">
-      <Filter>src\Phoenix</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
@@ -1410,16 +1419,22 @@
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Phoenix\Renderer\Framebuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLFramebuffer.h" />
-    <ClInclude Include="src\Phoenix\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib\stb\stb_image.cpp">
       <Filter>lib\stb</Filter>
     </ClCompile>
-    <ClCompile Include="src\Phoenix\Application.cpp">
-      <Filter>src\Phoenix</Filter>
+    <ClCompile Include="src\Phoenix\Core\Application.cpp">
+      <Filter>src\Phoenix\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Phoenix\Core\Layer.cpp">
+      <Filter>src\Phoenix\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Phoenix\Core\LayerStack.cpp">
+      <Filter>src\Phoenix\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Phoenix\Core\Log.cpp">
+      <Filter>src\Phoenix\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Phoenix\ImGui\ImGuiBuild.cpp">
       <Filter>src\Phoenix\ImGui</Filter>
@@ -1427,19 +1442,16 @@
     <ClCompile Include="src\Phoenix\ImGui\ImGuiLayer.cpp">
       <Filter>src\Phoenix\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Phoenix\Layer.cpp">
-      <Filter>src\Phoenix</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Phoenix\LayerStack.cpp">
-      <Filter>src\Phoenix</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Phoenix\Log.cpp">
-      <Filter>src\Phoenix</Filter>
-    </ClCompile>
     <ClCompile Include="src\Phoenix\Renderer\Buffer.cpp">
       <Filter>src\Phoenix\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Phoenix\Renderer\Framebuffer.cpp">
+      <Filter>src\Phoenix\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Phoenix\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Phoenix\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Phoenix\Renderer\OrthographicCameraController.cpp">
       <Filter>src\Phoenix\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Phoenix\Renderer\RenderCommand.cpp">
@@ -1466,6 +1478,9 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1487,8 +1502,5 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Phoenix\Renderer\Framebuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
-    <ClCompile Include="src\Phoenix\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

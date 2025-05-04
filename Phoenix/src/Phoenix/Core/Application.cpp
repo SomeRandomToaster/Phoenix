@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "Application.h"
 
-#include "Renderer/Renderer.h"
-#include "Renderer/RenderCommand.h"
-#include "Core/Timestep.h"
+#include "Phoenix/Renderer/Renderer.h"
+#include "Phoenix/Renderer/RenderCommand.h"
+#include "Phoenix/Core/Timestep.h"
 
 #include "GLFW/glfw3.h"
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core.h"
-#include "Events/Event.h"
-#include "Core/Timestep.h"
+#include "Phoenix/Events/Event.h"
+#include "Phoenix/Core/Timestep.h"
 
 namespace Phoenix
 {

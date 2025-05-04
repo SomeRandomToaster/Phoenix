@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Window.h"
-#include "Events/ApplicationEvent.h"
+#include "Phoenix/Events/ApplicationEvent.h"
 #include "LayerStack.h"
 #include "Phoenix/ImGui/ImGuiLayer.h"
-#include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/OrthographicCamera.h"
+#include "Phoenix/Renderer/Shader.h"
+#include "Phoenix/Renderer/Buffer.h"
+#include "Phoenix/Renderer/VertexArray.h"
+#include "Phoenix/Renderer/OrthographicCamera.h"
 
 namespace Phoenix {
 	class PH_API Application

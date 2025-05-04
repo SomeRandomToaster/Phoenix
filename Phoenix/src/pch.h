@@ -4,8 +4,8 @@
 	#include <Windows.h>
 #endif
 
-#include "Phoenix/Log.h"
-#include "Phoenix/KeyCodes.h"
+#include "Phoenix/Core/Log.h"
+#include "Phoenix/Core/KeyCodes.h"
 
 #include <functional>
 #include <memory.h>

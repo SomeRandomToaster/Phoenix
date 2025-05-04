@@ -2,7 +2,7 @@
 #include "WindowsInput.h"
 
 #include "GLFW/glfw3.h"
-#include "Phoenix/Application.h"
+#include "Phoenix/Core/Application.h"
 
 namespace Phoenix 
 {

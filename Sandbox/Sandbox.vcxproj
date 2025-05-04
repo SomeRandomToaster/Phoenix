@@ -137,6 +137,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\AppLayer.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\AppLayer.cpp" />
     <ClCompile Include="src\SandboxApp.cpp" />
   </ItemGroup>
@@ -144,9 +147,6 @@
     <ProjectReference Include="..\Phoenix\Phoenix.vcxproj">
       <Project>{40FF9C0C-ACDE-1BA8-B5F6-A67E21558209}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\AppLayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
