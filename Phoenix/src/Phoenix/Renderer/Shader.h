@@ -13,9 +13,9 @@ namespace Phoenix
 		virtual void Unbind() const = 0;
 		virtual const std::string& GetName() const = 0;
 
-		static Shader* Create(const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& name);
-		static Shader* Create(const std::string& path, const std::string& name);
-		static Shader* Create(const std::string& path);
+		static Ref<Shader> Create(const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& name);
+		static Ref<Shader> Create(const std::string& path, const std::string& name);
+		static Ref<Shader> Create(const std::string& path);
 	};
 
 

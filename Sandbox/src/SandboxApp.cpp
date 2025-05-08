@@ -3,13 +3,13 @@
 #define PH_INCLUDE_MAIN 
 #include <Phoenix.h>
 
-#include <AppLayer.h>
+#include <RenderTest.h>
 
 
 class Sandbox : public Phoenix::Application {
 public:
 	Sandbox() {
-		PushLayer(new AppLayer());
+		PushLayer(new RenderTest());
 	}
 
 	

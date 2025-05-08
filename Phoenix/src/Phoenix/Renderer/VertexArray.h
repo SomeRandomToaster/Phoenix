@@ -17,6 +17,6 @@ namespace Phoenix
 		virtual void AddIndexBuffer(const Ref<IndexBuffer>& buffer) = 0;
 		virtual ~VertexArray() {}
 
-		static VertexArray* Create();
+		static Ref<VertexArray> Create();
 	};
 }

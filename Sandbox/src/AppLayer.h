@@ -35,7 +35,7 @@ public:
 
 		unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
 
-		squareVA.reset(Phoenix::VertexArray::Create());
+		squareVA = Phoenix::VertexArray::Create();
 
 		Phoenix::BufferLayout squareVBlayout = {
 			{Phoenix::Float3, "a_Position"}
@@ -44,14 +44,14 @@ public:
 		Ref<Phoenix::VertexBuffer> squareVB;
 
 
-		squareVB.reset(Phoenix::VertexBuffer::Create(squareVertices, squareVBlayout.GetStride(), 4));
+		squareVB = Phoenix::VertexBuffer::Create(squareVertices, squareVBlayout.GetStride(), 4);
 		squareVB->SetLayout(squareVBlayout);
 
 		squareVA->AddVertexBuffer(squareVB);
 
 		Ref<Phoenix::IndexBuffer> squareIB;
 
-		squareIB.reset(Phoenix::IndexBuffer::Create(squareIndices, 6));
+		squareIB = Phoenix::IndexBuffer::Create(squareIndices, 6);
 
 		squareVA->AddIndexBuffer(squareIB);
 

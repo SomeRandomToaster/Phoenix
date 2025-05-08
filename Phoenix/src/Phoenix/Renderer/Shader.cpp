@@ -7,7 +7,7 @@
 
 namespace Phoenix
 {
-	Shader* Shader::Create(const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& name)
+	Ref<Shader> Shader::Create(const std::string& vertexSrc, const std::string& fragmentSrc, const std::string& name)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -15,14 +15,14 @@ namespace Phoenix
 			PH_CORE_ASSERT(false, "RendererAPI::None now is not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLShader(vertexSrc, fragmentSrc, name);
+			return std::make_shared<OpenGLShader>(vertexSrc, fragmentSrc, name);
 		default:
 			PH_CORE_ASSERT(false, "Unknown RendererAPI");
 			return nullptr;
 		}
 	}
 
-	Shader* Shader::Create(const std::string& path)
+	Ref<Shader> Shader::Create(const std::string& path)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -30,14 +30,14 @@ namespace Phoenix
 			PH_CORE_ASSERT(false, "RendererAPI::None now is not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLShader(path);
+			return std::make_shared<OpenGLShader>(path);
 		default:
 			PH_CORE_ASSERT(false, "Unknown RendererAPI");
 			return nullptr;
 		}
 	}
 
-	Shader* Shader::Create(const std::string& path, const std::string& name)
+	Ref<Shader> Shader::Create(const std::string& path, const std::string& name)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -45,7 +45,7 @@ namespace Phoenix
 			PH_CORE_ASSERT(false, "RendererAPI::None now is not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLShader(path, name);
+			return std::make_shared<OpenGLShader>(path, name);
 		default:
 			PH_CORE_ASSERT(false, "Unknown RendererAPI");
 			return nullptr;
@@ -66,9 +66,7 @@ namespace Phoenix
 	{
 		if (shaders.find(name) == shaders.end())
 		{
-			Ref<Shader> ref;
-			ref.reset(Shader::Create(vertexSrc, fragmentSrc, name));
-			shaders[name] = ref;
+			shaders[name] = Shader::Create(vertexSrc, fragmentSrc, name);
 			return;
 		}
 		PH_CORE_WARN("Shader '{0}' already exists in library", name);
@@ -78,9 +76,7 @@ namespace Phoenix
 	{
 		if (shaders.find(name) == shaders.end())
 		{
-			Ref<Shader> ref;
-			ref.reset(Shader::Create(path, name));
-			shaders[name] = ref;
+			shaders[name] = Shader::Create(path, name);
 			return;
 		}
 		PH_CORE_WARN("Shader '{0}' already exists in library", name);

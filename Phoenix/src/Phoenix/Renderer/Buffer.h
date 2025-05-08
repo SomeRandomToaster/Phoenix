@@ -52,7 +52,7 @@ namespace Phoenix
 		
 		virtual ~VertexBuffer() {}
 
-		static VertexBuffer* Create(const void* vertices, unsigned int vertexSize, unsigned int count);
+		static Ref<VertexBuffer> Create(const void* vertices, unsigned int vertexSize, unsigned int count);
 	};
 
 	class IndexBuffer
@@ -63,6 +63,6 @@ namespace Phoenix
 		virtual unsigned int GetCount() const = 0;
 		virtual ~IndexBuffer() {}
 
-		static IndexBuffer* Create(const unsigned int* indices, unsigned int count);
+		static Ref<IndexBuffer> Create(const unsigned int* indices, unsigned int count);
 	};
 }

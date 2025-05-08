@@ -6,7 +6,7 @@
 
 namespace Phoenix
 {
-	VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -14,7 +14,7 @@ namespace Phoenix
 			PH_CORE_ASSERT(false, "RendererAPI::None now is not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexArray();
+			return std::make_shared<OpenGLVertexArray>();
 		default:
 			PH_CORE_ASSERT(false, "Unknown RendererAPI");
 			return nullptr;

@@ -61,7 +61,7 @@ namespace Phoenix
 		}
 	}
 
-	VertexBuffer* VertexBuffer::Create(const void* vertices, unsigned int vertexSize, unsigned int count)
+	Ref<VertexBuffer> VertexBuffer::Create(const void* vertices, unsigned int vertexSize, unsigned int count)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -69,14 +69,14 @@ namespace Phoenix
 			PH_CORE_ASSERT(false, "RendererAPI::None now is not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexBuffer(vertices, vertexSize, count);
+			return std::make_shared<OpenGLVertexBuffer>(vertices, vertexSize, count);
 		default:
 			PH_CORE_ASSERT(false, "Unknown RendererAPI");
 			return nullptr;
 		}
 	}
 
-	IndexBuffer* IndexBuffer::Create(const unsigned int* indices, unsigned int count)
+	Ref<IndexBuffer> IndexBuffer::Create(const unsigned int* indices, unsigned int count)
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -84,7 +84,7 @@ namespace Phoenix
 			PH_CORE_ASSERT(false, "RendererAPI::None now is not supported");
 			return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLIndexBuffer(indices, count);
+			return std::make_shared<OpenGLIndexBuffer>(indices, count);
 		default:
 			PH_CORE_ASSERT(false, "Unknown RendererAPI");
 			return nullptr;

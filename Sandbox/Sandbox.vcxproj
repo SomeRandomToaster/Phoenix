@@ -138,9 +138,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\AppLayer.h" />
+    <ClInclude Include="src\RenderTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AppLayer.cpp" />
+    <ClCompile Include="src\RenderTest.cpp" />
     <ClCompile Include="src\SandboxApp.cpp" />
   </ItemGroup>
   <ItemGroup>
