@@ -79,8 +79,8 @@ project "Phoenix"
 		buildoptions "/MT"
 
 
-project "Sandbox"
-	location "Sandbox"
+project "TrashSim"
+	location "TrashSim"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
