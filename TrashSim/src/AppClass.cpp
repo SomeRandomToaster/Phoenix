@@ -3,11 +3,13 @@
 #define PH_INCLUDE_MAIN 
 #include <Phoenix.h>
 
+#include "MainLayer.h"
+
 
 class TrashSim : public Phoenix::Application {
 public:
 	TrashSim() {
-
+		PushLayer(new MainLayer());
 	}
 
 	

@@ -10,3 +10,6 @@
 [submodule "Phoenix/lib/glm"]
 	path = Phoenix/lib/glm
 	url = https://github.com/g-truc/glm
+[submodule "TrashSim/lib/implot"]
+	path = TrashSim/lib/implot
+	url = https://github.com/epezent/implot.git

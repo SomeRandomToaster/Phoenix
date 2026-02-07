@@ -90,7 +90,11 @@ project "TrashSim"
 
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/lib/implot/implot.h",
+		"%{prj.name}/lib/implot/implot_internal.h",
+		"%{prj.name}/lib/implot/implot.cpp",
+		"%{prj.name}/lib/implot/implot_items.cpp"
 	}
 
 	includedirs {
@@ -98,7 +102,8 @@ project "TrashSim"
 		"Phoenix/src",
 		"Phoenix/lib/glm",
 		"Phoenix/lib/imgui",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{prj.name}/lib"
 	}
 
 	links {
@@ -111,6 +116,7 @@ project "TrashSim"
 
 		defines {
 			"PH_PLATFORM_WINDOWS",
+			"_USE_MATH_DEFINES"
 		}
 
 	filter "configurations:Debug"
