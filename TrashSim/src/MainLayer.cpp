@@ -15,26 +15,26 @@
 void MainLayer::OnAttach()
 {
 	// Vehicle model
-	StaticVehicleModel* vmod = new ModelExamples::LeadBall50Cal();
+	StaticVehicleModel* vmod = new ModelExamples::Blueberry();
 	USSA1976* amod = new USSA1976();
 
 	// Initial values
 	float u0_b_mps = 0.0f; // X-component of initial velocity
-	float v0_b_mps = 0.0f; // Y-component of initial velocity
-	float w0_b_mps = 0.0f; // Z-component of initial velocity
+	float v0_b_mps = 7.0f; // Y-component of initial velocity
+	float w0_b_mps = 7.0f; // Z-component of initial velocity
 	float p0_b_rps = 0.0f; // Initial roll rate
 	float q0_b_rps = 0.0f; // Initial pitch rate
 	float r0_b_rps = 0.0f; // Initial yaw rate
 	float x0_n_m = 0.0f; // Initial X coordinate
 	float y0_n_m = 0.0f; // Initial Y coordinate
-	float z0_n_m = -10000.0f; // Initial Z coordinate
+	float z0_n_m = -1000.0f; // Initial Z coordinate
 	float phi0_n_r = 0.0f; // Initial roll 
 	float theta0_n_r = float(-M_PI_2); // Initial pitch
 	float psi0_n_r = 0.0f; // Initial yaw
 
 	// Time bounds
 	float t0_s = 0.0f;
-	float tf_s = 100.0f;
+	float tf_s = 80.0f;
 	float h_s = 0.005f;
 
 	// Integration
@@ -65,6 +65,40 @@ void MainLayer::OnAttach()
 	};
 
 	Math::Integrators::ForwardEuler(x, Equations::FlatEarth, t_s, h_s, &models);
+	
+	// Post-processing
+	alpha_deg = std::vector<float>(nt_s);
+	beta_deg = std::vector<float>(nt_s);
+	mach_number = std::vector<float>(nt_s);
+
+	for (size_t i = 0; i < nt_s; i++) {
+		float u_b_mps = x[i][0];
+		float v_b_mps = x[i][1];
+		float w_b_mps = x[i][2];
+		float z_n_m = x[i][8];
+
+		float h_m = -z_n_m;
+
+		float true_airspeed_mps = sqrtf(u_b_mps * u_b_mps + v_b_mps * v_b_mps + w_b_mps * w_b_mps);
+		float speed_of_sound = USSA1976::InterpByTable(amod->cs_mps_table, h_m);
+
+		float w_over_u = 0;
+		if (u_b_mps != 0) {
+			w_over_u = w_b_mps / u_b_mps;
+		}
+
+		float v_over_Vrel = 0;
+		if (true_airspeed_mps != 0) {
+			v_over_Vrel = v_b_mps / true_airspeed_mps;
+		}
+
+		float alpha_r = atanf(w_over_u);
+		float beta_r = asinf(v_over_Vrel);
+
+		alpha_deg[i] = alpha_r * 180.f / M_PI;
+		beta_deg[i] = beta_r * 180.f / M_PI;
+		mach_number[i] = true_airspeed_mps / speed_of_sound;
+	}
 
 	// Output
 	PH_TRACE("Terminal velocity is {:.3f} m/s\n", x[nt_s - 1][0]);
@@ -75,7 +109,13 @@ void MainLayer::OnAttach()
 		size_t idx = var_indices[i];
 		
 		for (size_t j = 0; j < nt_s; j++) {
-			vars_to_plot[i][j] = x[j][idx];
+			if (idx == 8) {
+				vars_to_plot[i][j] = -x[j][idx];
+			}
+			else {
+				vars_to_plot[i][j] = x[j][idx];
+			}
+			
 		}
 	}
 
@@ -94,27 +134,95 @@ void MainLayer::OnImGuiRender()
 	//// Plotting
 	ImGui::Begin("Plots");
 	
-
-	if (ImPlot::BeginSubplots("", row_count, col_count, {-1, -1}))
+	size_t idx = 0;
+	if (ImPlot::BeginSubplots("", win0_row_count, win0_col_count, {-1, -1}))
 	{
-		for (int row = 0; row < row_count; row++)
+		for (int row = 0; row < win0_row_count; row++)
 		{
-			for (int column = 0; column < col_count; column++)
+			for (int column = 0; column < win0_col_count; column++)
 			{
-				size_t idx = row * col_count + column;
-
 				if (ImPlot::BeginPlot("")) {
 					ImPlot::SetNextLineStyle({ 1, 1, 0, 1 });
 					ImPlot::SetupAxes(x_labels[idx].c_str(), y_labels[idx].c_str());
 					ImPlot::PlotLine("", t_s.data(), vars_to_plot[idx].data(), t_s.size());
 					ImPlot::EndPlot();
 				}
+				idx++;
 			}
 		}
 	}
 	ImPlot::EndSubplots();
-	
+	ImGui::End();
 
+
+
+	ImGui::Begin("More plots");
+	if (ImPlot::BeginSubplots("1", win1_row_count, win1_col_count, { -1, -1 }))
+	{
+		if (ImPlot::BeginPlot("")) {
+			ImPlot::SetNextLineStyle({ 1, 0, 1, 1 });
+			ImPlot::SetupAxes("Time [s]", "AoA [deg]");
+			ImPlot::PlotLine("", t_s.data(), alpha_deg.data(), t_s.size());
+			ImPlot::EndPlot();
+		}
+
+		if (ImPlot::BeginPlot("")) {
+			ImPlot::SetNextLineStyle({ 1, 0, 1, 1 });
+			ImPlot::SetupAxes("Time [s]", "AoS [deg]");
+			ImPlot::PlotLine("", t_s.data(), beta_deg.data(), t_s.size());
+			ImPlot::EndPlot();
+		}
+
+		if (ImPlot::BeginPlot("")) {
+			ImPlot::SetNextLineStyle({ 1, 0, 1, 1 });
+			ImPlot::SetupAxes("Time [s]", "Mach");
+			ImPlot::PlotLine("", t_s.data(), mach_number.data(), t_s.size());
+			ImPlot::EndPlot();
+		}
+
+		if (ImPlot::BeginPlot("")) {
+			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetupAxes("Time [s]", "North [m]");
+			ImPlot::PlotLine("", t_s.data(), vars_to_plot[8].data(), t_s.size());
+			ImPlot::EndPlot();
+		}
+
+		if (ImPlot::BeginPlot("")) {
+			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetupAxes("Time [s]", "East [m]");
+			ImPlot::PlotLine("", t_s.data(), vars_to_plot[9].data(), t_s.size());
+			ImPlot::EndPlot();
+		}
+
+		if (ImPlot::BeginPlot("")) {
+			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetupAxes("Time [s]", "Altitude [m]");
+			ImPlot::PlotLine("", t_s.data(), vars_to_plot[10].data(), t_s.size());
+			ImPlot::EndPlot();
+		}
+
+		if (ImPlot::BeginPlot("")) {
+			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetupAxes("North [m]", "Altitude [m]");
+			ImPlot::PlotLine("", vars_to_plot[8].data(), vars_to_plot[10].data(), t_s.size());
+			ImPlot::EndPlot();
+		}
+
+		if (ImPlot::BeginPlot("")) {
+			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetupAxes("East [m]", "Altitude [m]");
+			ImPlot::PlotLine("", vars_to_plot[9].data(), vars_to_plot[10].data(), t_s.size());
+			ImPlot::EndPlot();
+		}
+
+		if (ImPlot::BeginPlot("")) {
+			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetupAxes("East [m]", "North [m]");
+			ImPlot::PlotLine("", vars_to_plot[8].data(), vars_to_plot[9].data(), t_s.size());
+			ImPlot::EndPlot();
+		}
+	}
+	ImPlot::EndSubplots();
 	ImGui::End();
 }
 

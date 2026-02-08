@@ -17,4 +17,20 @@ namespace ModelExamples
 			: Sphere(12e-3f, 6.35e-3f) {
 		}
 	};
+
+	class BowlingBall : public Sphere
+	{
+	public:
+		BowlingBall()
+			: Sphere(7.25, 0.217) {
+		}
+	};
+
+	class Blueberry : public Sphere
+	{
+	public:
+		Blueberry()
+			: Sphere(0.75e-3, 11e-3) {
+		}
+	};
 }
