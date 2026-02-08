@@ -1,7 +1,8 @@
 #include "pch.h"
 
 #include <MainLayer.h>
-#include <ModelExamples/Spheres.h>
+#include <Models/Vehicle/Spheres.h>
+#include <Models/Atmosphere/USSA1976.h>
 #include <Math/Common.h>
 #include <Math/Integrators.h>
 #include <Equations/FlatEarth.h>
@@ -14,7 +15,8 @@
 void MainLayer::OnAttach()
 {
 	// Vehicle model
-	VehicleModel vmod = ModelExamples::LeadBall50Cal();
+	StaticVehicleModel* vmod = new ModelExamples::LeadBall50Cal();
+	USSA1976* amod = new USSA1976();
 
 	// Initial values
 	float u0_b_mps = 0.0f; // X-component of initial velocity
@@ -58,10 +60,11 @@ void MainLayer::OnAttach()
 	x[0] = x0;
 
 	ModelSet models = {
-		&vmod
+		vmod,
+		amod
 	};
 
-	Math::Integrators::ForwardEuler(x, Equations::FlatEarth, t_s, h_s, models);
+	Math::Integrators::ForwardEuler(x, Equations::FlatEarth, t_s, h_s, &models);
 
 	// Output
 	PH_TRACE("Terminal velocity is {:.3f} m/s\n", x[nt_s - 1][0]);

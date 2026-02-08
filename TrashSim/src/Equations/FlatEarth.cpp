@@ -1,8 +1,9 @@
 #include <Equations/FlatEarth.h>
+#include <Models/Atmosphere/USSA1976.h>
 
 namespace Equations
 {
-	std::vector<float> FlatEarth(const std::vector<float>& x, float t, const ModelSet& models) {
+	std::vector<float> FlatEarth(const std::vector<float>& x, float t, const void* data) {
         /*
         :params:
         x - vector of state variables
@@ -54,13 +55,15 @@ namespace Equations
         float c_psi = cosf(psi_n_r);
 
         // Vehicle model parameters
-        float m_kg = models.vmod->m_kg;
-        float Jx_kgm2 = models.vmod->Jx_kgm2;
-        float Jy_kgm2 = models.vmod->Jy_kgm2;
-        float Jz_kgm2 = models.vmod->Jz_kgm2;
-        float Jxz_kgm2 = models.vmod->Jxz_kgm2;
-        float CD_approx = models.vmod->CD_approx;
-        float Aref_m2 = models.vmod->Aref_m2;
+
+        const ModelSet* models = (const ModelSet*)data;
+        float m_kg = models->vmod->m_kg;
+        float Jx_kgm2 = models->vmod->Jx_kgm2;
+        float Jy_kgm2 = models->vmod->Jy_kgm2;
+        float Jz_kgm2 = models->vmod->Jz_kgm2;
+        float Jxz_kgm2 = models->vmod->Jxz_kgm2;
+        float CD_approx = models->vmod->CD_approx;
+        float Aref_m2 = models->vmod->Aref_m2;
 
         float Jden_kg2m4 = Jx_kgm2 * Jz_kgm2 - Jxz_kgm2 * Jxz_kgm2;
 
@@ -74,8 +77,8 @@ namespace Equations
         // Aerodynamics
         //// Atmosphere model
         float h_m = -z_n_m; //Height
-        float rho_kgpm3 = 1.2f;
-        //rho_kgpm3 = interp.atmo_interp(amod['rho'], h_m)
+        //float rho_kgpm3 = 1.2f;
+        float rho_kgpm3 = USSA1976::InterpByTable(models->amod->rho_kgpm3_table, h_m);
 
         //// Air data calculation
         float true_airspeed_mps = sqrtf(u_b_mps * u_b_mps + v_b_mps * v_b_mps + w_b_mps * w_b_mps);

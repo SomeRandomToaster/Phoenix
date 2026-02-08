@@ -1,6 +1,6 @@
 #pragma once
 
-struct VehicleModel
+struct StaticVehicleModel
 {
 	float m_kg;
 	float Jx_kgm2;
