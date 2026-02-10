@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "USSA1976.h"
+#include <Math/Common.h>
 
 #include <cstdio>
 #include <array>
@@ -22,8 +23,8 @@ float USSA1976::InterpByTable(const std::vector<float>& table, float h)
 
     float t = 0;
     size_t l_idx = 0;
-    size_t r_idx = 0;
-    for (auto seg : segments) {
+    size_t r_idx = 1;
+    for (const auto& seg : segments) {
         float lowest_alt = seg[0];
         float highest_alt = seg[1];
 
@@ -31,13 +32,13 @@ float USSA1976::InterpByTable(const std::vector<float>& table, float h)
             float alt_step = seg[2];
             size_t base_idx = size_t(seg[3]);
             l_idx = size_t(floor((h - lowest_alt) / alt_step + base_idx));
-            r_idx = size_t(ceil((h - lowest_alt) / alt_step + base_idx));
+            r_idx = l_idx + 1;
             float l_idx_alt = (l_idx - base_idx) * alt_step + lowest_alt;
             t = (h - l_idx_alt) / alt_step;
             break;
         }
     }
-    return table[l_idx] * t + table[r_idx] * (1 - t);
+    return Math::Lerp(table[l_idx], table[r_idx], t);
 }
 
 
