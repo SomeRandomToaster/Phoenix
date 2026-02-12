@@ -141,7 +141,7 @@ namespace Equations
             + (-s_phi * c_psi + c_phi * s_theta * s_psi) * w_b_mps);
         dx[8] = -s_theta * u_b_mps + s_phi * c_theta * v_b_mps + c_phi * c_theta * w_b_mps;
         //// Euler kinematic equations
-        dx[9] = p_b_rps + s_phi * c_theta * q_b_rps + c_phi * t_theta * r_b_rps;
+        dx[9] = p_b_rps + s_phi * t_theta * q_b_rps + c_phi * t_theta * r_b_rps;
         dx[10] = c_phi * q_b_rps - s_phi * r_b_rps;
         dx[11] = (s_phi / c_theta) * q_b_rps + (c_phi / c_theta) * r_b_rps;
 

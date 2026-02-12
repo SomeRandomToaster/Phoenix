@@ -13,7 +13,7 @@ class MainLayer : public Phoenix::Layer
 		0, 1, 2, 9,
 		3, 4, 5, 10,
 
-		6, 7, 8
+		6, 7, 8, 11
 	};
 	std::vector<std::string> x_labels = {
 		"Time [s]", "Time [s]", "Time [s]", "Time [s]",

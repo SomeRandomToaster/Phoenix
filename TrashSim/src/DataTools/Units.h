@@ -8,6 +8,7 @@
 #define NMI_TO_M 1852
 
 #define SLUG_TO_KG 14.593902937
+#define LB_TO_KG 0.45359237
 
 #define LBF_TO_N 4.4482216153
 

@@ -2,6 +2,7 @@
 
 #include <MainLayer.h>
 #include <Models/Vehicle/Spheres.h>
+#include <Models/Vehicle/Boxes.h>
 #include <Models/Atmosphere/USSA1976.h>
 #include <Math/Common.h>
 #include <Math/Integrators.h>
@@ -15,21 +16,21 @@
 void MainLayer::OnAttach()
 {
 	// Vehicle model
-	StaticVehicleModel* vmod = new ModelExamples::CannonBall();
+	StaticVehicleModel* vmod = new ModelExamples::Brick();
 	// Atmosphere model
 	USSA1976* amod = new USSA1976();
 	// Verification data load
 	if (verification_mode) {
-		LoadVerificationData("assets/verification/Atmos_01_sim_01.csv");
+		LoadVerificationData("assets/verification/Atmos_02_sim_01.csv");
 	}
 
 	// Initial values
 	double u0_b_mps = 0.0f; // X-component of initial velocity
 	double v0_b_mps = 0.0f; // Y-component of initial velocity
 	double w0_b_mps = 0.0f; // Z-component of initial velocity
-	double p0_b_rps = 0.0f; // Initial roll rate
-	double q0_b_rps = 0.0f; // Initial pitch rate
-	double r0_b_rps = 0.0f; // Initial yaw rate
+	double p0_b_rps = 10.0 * DEG_TO_RAD; // Initial roll rate
+	double q0_b_rps = 20.0 * DEG_TO_RAD; // Initial pitch rate
+	double r0_b_rps = 30.0 * DEG_TO_RAD; // Initial yaw rate
 	double x0_n_m = 0.0f; // Initial X coordinate
 	double y0_n_m = 0.0f; // Initial Y coordinate
 	double z0_n_m = -30000.0f * FT_TO_M; // Initial Z coordinate
@@ -105,7 +106,7 @@ void MainLayer::OnAttach()
 	}
 
 	// Output
-	PH_TRACE("Terminal velocity is {:.3f} m/s\n", x[nt_s - 1][0]);
+	// PH_TRACE("Terminal velocity is {:.3f} m/s\n", x[nt_s - 1][0]);
 
 	// Plot data preparation
 	vars_to_plot = { var_indices.size(), std::vector<double>(nt_s) };
@@ -229,6 +230,7 @@ void MainLayer::OnImGuiRender()
 		}
 
 		if (ImPlot::BeginPlot("")) {
+			/*
 			ImPlot::SetNextLineStyle(plot_colors[1]);
 			ImPlot::SetupAxes("Time [s]", "Mach");
 			ImPlot::PlotLine("", t_s.data(), mach_number.data(), (int)t_s.size());
@@ -236,6 +238,16 @@ void MainLayer::OnImGuiRender()
 				ImPlot::SetNextLineStyle(plot_colors[3]);
 				ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["mach"].data(), (int)verification_data["t_s"].size());
 			}
+			*/
+
+			ImPlot::SetNextLineStyle(plot_colors[1]);
+			ImPlot::SetupAxes("Time [s]", "Yaw [r]");
+			ImPlot::PlotLine("", t_s.data(), vars_to_plot[11].data(), (int)t_s.size());
+			if (verification_mode && verification_plot_velocity) {
+				ImPlot::SetNextLineStyle(plot_colors[3]);
+				ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["psi_n_r"].data(), (int)verification_data["t_s"].size());
+			}
+
 			ImPlot::EndPlot();
 		}
 
@@ -389,6 +401,7 @@ void MainLayer::LoadVerificationData(const std::string& filename)
 	if (verification_plot_attitude) {
 		verification_data.rename_col("eulerAngle_deg_Roll", "phi_n_r");
 		verification_data.rename_col("eulerAngle_deg_Pitch", "theta_n_r");
+		verification_data.rename_col("eulerAngle_deg_Yaw", "psi_n_r");
 	}
 
 	if (verification_plot_angular_rates) {
