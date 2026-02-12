@@ -57,13 +57,13 @@ namespace Equations
         // Vehicle model parameters
 
         const ModelSet* models = (const ModelSet*)data;
-        double m_kg = models->vmod->m_kg;
-        double Jx_kgm2 = models->vmod->Jx_kgm2;
-        double Jy_kgm2 = models->vmod->Jy_kgm2;
-        double Jz_kgm2 = models->vmod->Jz_kgm2;
-        double Jxz_kgm2 = models->vmod->Jxz_kgm2;
-        double CD_approx = models->vmod->CD_approx;
-        double Aref_m2 = models->vmod->Aref_m2;
+        double m_kg = models->vmod->get_m_kg();
+        double Jx_kgm2 = models->vmod->get_Jx_kgm2();
+        double Jy_kgm2 = models->vmod->get_Jy_kgm2();
+        double Jz_kgm2 = models->vmod->get_Jz_kgm2();
+        double Jxz_kgm2 = models->vmod->get_Jxz_kgm2();
+        double CD_approx = models->vmod->get_CD_approx();
+        double Aref_m2 = models->vmod->get_Aref_m2();
 
         double Jden_kg2m4 = Jx_kgm2 * Jz_kgm2 - Jxz_kgm2 * Jxz_kgm2;
 
