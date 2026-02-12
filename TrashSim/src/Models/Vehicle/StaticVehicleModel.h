@@ -2,11 +2,11 @@
 
 struct StaticVehicleModel
 {
-	float m_kg;
-	float Jx_kgm2;
-	float Jy_kgm2;
-	float Jz_kgm2;
-	float Jxz_kgm2;
-	float CD_approx;
-	float Aref_m2;
+	double m_kg;
+	double Jx_kgm2;
+	double Jy_kgm2;
+	double Jz_kgm2;
+	double Jxz_kgm2;
+	double CD_approx;
+	double Aref_m2;
 };

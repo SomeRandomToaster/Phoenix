@@ -3,7 +3,7 @@
 
 namespace Equations
 {
-	std::vector<float> FlatEarth(const std::vector<float>& x, float t, const void* data) {
+	std::vector<double> FlatEarth(const std::vector<double>& x, double t, const void* data) {
         /*
         :params:
         x - vector of state variables
@@ -29,92 +29,96 @@ namespace Equations
         */
 
         // Answer init
-        std::vector<float> dx(x.size());
+        std::vector<double> dx(x.size());
 
         // State variables init
-        float u_b_mps = x[0];
-        float v_b_mps = x[1];
-        float w_b_mps = x[2];
-        float p_b_rps = x[3];
-        float q_b_rps = x[4];
-        float r_b_rps = x[5];
-        float x_n_m = x[6];
-        float y_n_m = x[7];
-        float z_n_m = x[8];
-        float phi_n_r = x[9];
-        float theta_n_r = x[10];
-        float psi_n_r = x[11];
+        double u_b_mps = x[0];
+        double v_b_mps = x[1];
+        double w_b_mps = x[2];
+        double p_b_rps = x[3];
+        double q_b_rps = x[4];
+        double r_b_rps = x[5];
+        double x_n_m = x[6];
+        double y_n_m = x[7];
+        double z_n_m = x[8];
+        double phi_n_r = x[9];
+        double theta_n_r = x[10];
+        double psi_n_r = x[11];
 
         // Euler angles trig functions
-        float s_phi = sinf(phi_n_r);
-        float c_phi = cosf(phi_n_r);
-        float s_theta = sinf(theta_n_r);
-        float c_theta = cosf(theta_n_r);
-        float t_theta = tanf(theta_n_r);
-        float s_psi = sinf(psi_n_r);
-        float c_psi = cosf(psi_n_r);
+        double s_phi = sin(phi_n_r);
+        double c_phi = cos(phi_n_r);
+        double s_theta = sin(theta_n_r);
+        double c_theta = cos(theta_n_r);
+        double t_theta = tan(theta_n_r);
+        double s_psi = sin(psi_n_r);
+        double c_psi = cos(psi_n_r);
 
         // Vehicle model parameters
 
         const ModelSet* models = (const ModelSet*)data;
-        float m_kg = models->vmod->m_kg;
-        float Jx_kgm2 = models->vmod->Jx_kgm2;
-        float Jy_kgm2 = models->vmod->Jy_kgm2;
-        float Jz_kgm2 = models->vmod->Jz_kgm2;
-        float Jxz_kgm2 = models->vmod->Jxz_kgm2;
-        float CD_approx = models->vmod->CD_approx;
-        float Aref_m2 = models->vmod->Aref_m2;
+        double m_kg = models->vmod->m_kg;
+        double Jx_kgm2 = models->vmod->Jx_kgm2;
+        double Jy_kgm2 = models->vmod->Jy_kgm2;
+        double Jz_kgm2 = models->vmod->Jz_kgm2;
+        double Jxz_kgm2 = models->vmod->Jxz_kgm2;
+        double CD_approx = models->vmod->CD_approx;
+        double Aref_m2 = models->vmod->Aref_m2;
 
-        float Jden_kg2m4 = Jx_kgm2 * Jz_kgm2 - Jxz_kgm2 * Jxz_kgm2;
+        double Jden_kg2m4 = Jx_kgm2 * Jz_kgm2 - Jxz_kgm2 * Jxz_kgm2;
 
         // Gravity
-        float gz_n_mps2 = 9.81f;
+        // double gz_n_mps2 = 9.81;
+        double G_m3pkgs2 = 6.6743015e-11;
+        double Me_kg = 5.97226e24;
+        double R_m = 6378137 - z_n_m;
+        double gz_n_mps2 = G_m3pkgs2 * Me_kg / (R_m * R_m);
 
-        float gx_b_mps2 = -s_theta * gz_n_mps2;
-        float gy_b_mps2 = s_phi * c_theta * gz_n_mps2;
-        float gz_b_mps2 = c_phi * c_theta * gz_n_mps2;
+        double gx_b_mps2 = -s_theta * gz_n_mps2;
+        double gy_b_mps2 = s_phi * c_theta * gz_n_mps2;
+        double gz_b_mps2 = c_phi * c_theta * gz_n_mps2;
 
         // Aerodynamics
         //// Atmosphere model
-        float h_m = -z_n_m; //Height
-        //float rho_kgpm3 = 1.2f;
-        float rho_kgpm3 = USSA1976::InterpByTable(models->amod->rho_kgpm3_table, h_m);
+        double h_m = -z_n_m; //Height
+        //double rho_kgpm3 = 1.2f;
+        double rho_kgpm3 = USSA1976::InterpByTable(models->amod->table["rho_kgpm3"], h_m);
 
         //// Air data calculation
-        float true_airspeed_mps = sqrtf(u_b_mps * u_b_mps + v_b_mps * v_b_mps + w_b_mps * w_b_mps);
-        float qbar_kgpms2 = 0.5f * rho_kgpm3 * true_airspeed_mps * true_airspeed_mps;
+        double true_airspeed_mps = sqrt(u_b_mps * u_b_mps + v_b_mps * v_b_mps + w_b_mps * w_b_mps);
+        double qbar_kgpms2 = 0.5f * rho_kgpm3 * true_airspeed_mps * true_airspeed_mps;
 
-        float w_over_u = 0;
+        double w_over_u = 0;
         if(u_b_mps != 0) {
             w_over_u = w_b_mps / u_b_mps;
         }
 
-        float v_over_Vrel = 0;
+        double v_over_Vrel = 0;
         if (true_airspeed_mps != 0) {
             v_over_Vrel = v_b_mps / true_airspeed_mps;
         }
 
-        float alpha_r = atanf(w_over_u); // Angle of Attack(AoA)
-        float beta_r = asinf(v_over_Vrel); // Angle of Sideslip(AoS)
-        float s_alpha = sinf(alpha_r);
-        float c_alpha = cosf(alpha_r);
-        float s_beta = sinf(beta_r);
-        float c_beta = cosf(beta_r);
+        double alpha_r = atan(w_over_u); // Angle of Attack(AoA)
+        double beta_r = asin(v_over_Vrel); // Angle of Sideslip(AoS)
+        double s_alpha = sin(alpha_r);
+        double c_alpha = cos(alpha_r);
+        double s_beta = sin(beta_r);
+        double c_beta = cos(beta_r);
 
         //// Aerodynamic forces
-        float drag_kgmps2 = CD_approx * qbar_kgpms2 * Aref_m2;
-        float side_kgmps2 = 0;
-        float lift_kgmps2 = 0;
+        double drag_kgmps2 = 0; //CD_approx * qbar_kgpms2 * Aref_m2;
+        double side_kgmps2 = 0;
+        double lift_kgmps2 = 0;
 
         // External forces
-        float Fx_b_kgmps2 = -c_alpha * c_beta * drag_kgmps2 + c_alpha * s_beta * side_kgmps2 + s_alpha * lift_kgmps2;
-        float Fy_b_kgmps2 = -s_beta * drag_kgmps2 - c_beta * side_kgmps2;
-        float Fz_b_kgmps2 = -s_alpha * c_beta * drag_kgmps2 + s_alpha * s_beta * side_kgmps2 - c_alpha * lift_kgmps2;
+        double Fx_b_kgmps2 = -c_alpha * c_beta * drag_kgmps2 + c_alpha * s_beta * side_kgmps2 + s_alpha * lift_kgmps2;
+        double Fy_b_kgmps2 = -s_beta * drag_kgmps2 - c_beta * side_kgmps2;
+        double Fz_b_kgmps2 = -s_alpha * c_beta * drag_kgmps2 + s_alpha * s_beta * side_kgmps2 - c_alpha * lift_kgmps2;
 
         // External moments
-        float L_b_kgm2ps2 = 0;
-        float M_b_kgm2ps2 = 0;
-        float N_b_kgm2ps2 = 0;
+        double L_b_kgm2ps2 = 0;
+        double M_b_kgm2ps2 = 0;
+        double N_b_kgm2ps2 = 0;
 
         // Derivatives
         //// Translation equations

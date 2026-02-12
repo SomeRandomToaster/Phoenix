@@ -6,5 +6,5 @@
 
 namespace Equations
 {
-	std::vector<float> FlatEarth(const std::vector<float>& x, float t, const void* data);
+	std::vector<double> FlatEarth(const std::vector<double>& x, double t, const void* data);
 }

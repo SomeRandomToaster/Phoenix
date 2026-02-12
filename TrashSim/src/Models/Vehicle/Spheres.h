@@ -1,13 +1,14 @@
 #pragma once
 
 #include <Models/Vehicle/StaticVehicleModel.h>
+#include <DataTools/Units.h>
 
 namespace ModelExamples
 {
 	class Sphere : public StaticVehicleModel
 	{
 	public:
-		Sphere(float m_kg, float r_m);
+		Sphere(double m_kg, double r_m);
 	};
 
 	class LeadBall50Cal : public Sphere
@@ -22,7 +23,7 @@ namespace ModelExamples
 	{
 	public:
 		BowlingBall()
-			: Sphere(7.25, 0.217) {
+			: Sphere(7.25f, 0.217f) {
 		}
 	};
 
@@ -30,7 +31,15 @@ namespace ModelExamples
 	{
 	public:
 		Blueberry()
-			: Sphere(0.75e-3, 11e-3) {
+			: Sphere(0.75e-3f, 11e-3f) {
+		}
+	};
+
+	class CannonBall : public Sphere
+	{
+	public:
+		CannonBall()
+			: Sphere(1.f * SLUG_TO_KG, 3.f * IN_TO_M) {
 		}
 	};
 }

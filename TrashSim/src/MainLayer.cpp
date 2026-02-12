@@ -15,30 +15,33 @@
 void MainLayer::OnAttach()
 {
 	// Vehicle model
-	StaticVehicleModel* vmod = new ModelExamples::Blueberry();
+	StaticVehicleModel* vmod = new ModelExamples::CannonBall();
+	// Atmosphere model
 	USSA1976* amod = new USSA1976();
+	// VerificationData
+	LoadVerificationData();
 
 	// Initial values
-	float u0_b_mps = 0.0f; // X-component of initial velocity
-	float v0_b_mps = 7.0f; // Y-component of initial velocity
-	float w0_b_mps = 7.0f; // Z-component of initial velocity
-	float p0_b_rps = 0.0f; // Initial roll rate
-	float q0_b_rps = 0.0f; // Initial pitch rate
-	float r0_b_rps = 0.0f; // Initial yaw rate
-	float x0_n_m = 0.0f; // Initial X coordinate
-	float y0_n_m = 0.0f; // Initial Y coordinate
-	float z0_n_m = -1000.0f; // Initial Z coordinate
-	float phi0_n_r = 0.0f; // Initial roll 
-	float theta0_n_r = float(-M_PI_2); // Initial pitch
-	float psi0_n_r = 0.0f; // Initial yaw
+	double u0_b_mps = 0.0f; // X-component of initial velocity
+	double v0_b_mps = 0.0f; // Y-component of initial velocity
+	double w0_b_mps = 0.0f; // Z-component of initial velocity
+	double p0_b_rps = 0.0f; // Initial roll rate
+	double q0_b_rps = 0.0f; // Initial pitch rate
+	double r0_b_rps = 0.0f; // Initial yaw rate
+	double x0_n_m = 0.0f; // Initial X coordinate
+	double y0_n_m = 0.0f; // Initial Y coordinate
+	double z0_n_m = -30000.0f * FT_TO_M; // Initial Z coordinate
+	double phi0_n_r = 0.0f; // Initial roll 
+	double theta0_n_r = 0.0f; // Initial pitch
+	double psi0_n_r = 0.0f; // Initial yaw
 
 	// Time bounds
-	float t0_s = 0.0f;
-	float tf_s = 80.0f;
-	float h_s = 0.005f;
+	double t0_s = 0.0f;
+	double tf_s = 30.0f;
+	double h_s = 0.005f;
 
 	// Integration
-	std::vector<float> x0 = {
+	std::vector<double> x0 = {
 		u0_b_mps,
 		v0_b_mps,
 		w0_b_mps,
@@ -56,7 +59,7 @@ void MainLayer::OnAttach()
 
 	t_s = Math::RangeArray(t0_s, tf_s + h_s, h_s);
 	size_t nt_s = t_s.size();
-	std::vector<std::vector<float>> x(nt_s, std::vector<float>(nx0));
+	std::vector<std::vector<double>> x(nt_s, std::vector<double>(nx0));
 	x[0] = x0;
 
 	ModelSet models = {
@@ -64,39 +67,38 @@ void MainLayer::OnAttach()
 		amod
 	};
 
-	Math::Integrators::ForwardEuler(x, Equations::FlatEarth, t_s, h_s, &models);
+	Math::Integrators::Bashforth(x, Equations::FlatEarth, t_s, h_s, &models);
 	
 	// Post-processing
-	alpha_deg = std::vector<float>(nt_s);
-	beta_deg = std::vector<float>(nt_s);
-	mach_number = std::vector<float>(nt_s);
+	alpha_deg = std::vector<double>(nt_s);
+	beta_deg = std::vector<double>(nt_s);
+	mach_number = std::vector<double>(nt_s);
 
 	for (size_t i = 0; i < nt_s; i++) {
-		float u_b_mps = x[i][0];
-		float v_b_mps = x[i][1];
-		float w_b_mps = x[i][2];
-		float z_n_m = x[i][8];
+		double u_b_mps = x[i][0];
+		double v_b_mps = x[i][1];
+		double w_b_mps = x[i][2];
+		double z_n_m = x[i][8];
+		double h_m = -z_n_m;
 
-		float h_m = -z_n_m;
+		double true_airspeed_mps = sqrtf(u_b_mps * u_b_mps + v_b_mps * v_b_mps + w_b_mps * w_b_mps);
+		double speed_of_sound = USSA1976::InterpByTable(amod->table["cs_mps"], h_m);
 
-		float true_airspeed_mps = sqrtf(u_b_mps * u_b_mps + v_b_mps * v_b_mps + w_b_mps * w_b_mps);
-		float speed_of_sound = USSA1976::InterpByTable(amod->cs_mps_table, h_m);
-
-		float w_over_u = 0;
+		double w_over_u = 0;
 		if (u_b_mps != 0) {
 			w_over_u = w_b_mps / u_b_mps;
 		}
 
-		float v_over_Vrel = 0;
+		double v_over_Vrel = 0;
 		if (true_airspeed_mps != 0) {
 			v_over_Vrel = v_b_mps / true_airspeed_mps;
 		}
 
-		float alpha_r = atanf(w_over_u);
-		float beta_r = asinf(v_over_Vrel);
+		double alpha_r = atan(w_over_u);
+		double beta_r = asin(v_over_Vrel);
 
-		alpha_deg[i] = alpha_r * 180.f / M_PI;
-		beta_deg[i] = beta_r * 180.f / M_PI;
+		alpha_deg[i] = double(alpha_r * 180.f / M_PI);
+		beta_deg[i] = double(beta_r * 180.f / M_PI);
 		mach_number[i] = true_airspeed_mps / speed_of_sound;
 	}
 
@@ -104,7 +106,7 @@ void MainLayer::OnAttach()
 	PH_TRACE("Terminal velocity is {:.3f} m/s\n", x[nt_s - 1][0]);
 
 	// Plot data preparation
-	vars_to_plot = { var_indices.size(), std::vector<float>(nt_s) };
+	vars_to_plot = { var_indices.size(), std::vector<double>(nt_s) };
 	for (size_t i = 0; i < var_indices.size(); i++) {
 		size_t idx = var_indices[i];
 		
@@ -135,16 +137,55 @@ void MainLayer::OnImGuiRender()
 	ImGui::Begin("Plots");
 	
 	size_t idx = 0;
-	if (ImPlot::BeginSubplots("", win0_row_count, win0_col_count, {-1, -1}))
+	if (ImPlot::BeginSubplots("", (int)win0_row_count, (int)win0_col_count, {-1, -1}))
 	{
 		for (int row = 0; row < win0_row_count; row++)
 		{
 			for (int column = 0; column < win0_col_count; column++)
 			{
+
 				if (ImPlot::BeginPlot("")) {
-					ImPlot::SetNextLineStyle({ 1, 1, 0, 1 });
+
 					ImPlot::SetupAxes(x_labels[idx].c_str(), y_labels[idx].c_str());
-					ImPlot::PlotLine("", t_s.data(), vars_to_plot[idx].data(), t_s.size());
+					switch (idx) {
+					case 0:
+						ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+						ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["u_b_mps"].data(), (int)verification_data["t_s"].size());
+						break;
+					case 1:
+						ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+						ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["v_b_mps"].data(), (int)verification_data["t_s"].size());
+						break;
+					case 2:
+						ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+						ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["w_b_mps"].data(), (int)verification_data["t_s"].size());
+						break;
+					case 3:
+						ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+						ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["phi_n_r"].data(), (int)verification_data["t_s"].size());
+						break;
+					case 4:
+						ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+						ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["p_b_rps"].data(), (int)verification_data["t_s"].size());
+						break;
+					case 5:
+						ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+						ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["q_b_rps"].data(), (int)verification_data["t_s"].size());
+						break;
+					case 6:
+						ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+						ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["r_b_rps"].data(), (int)verification_data["t_s"].size());
+						break;
+					case 7:
+						ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+						ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["theta_n_r"].data(), (int)verification_data["t_s"].size());
+						break;
+					default:
+						break;
+					}
+
+					ImPlot::SetNextLineStyle({ 1, 1, 0, 1 });
+					ImPlot::PlotLine("", t_s.data(), vars_to_plot[idx].data(), (int)t_s.size());
 					ImPlot::EndPlot();
 				}
 				idx++;
@@ -157,68 +198,82 @@ void MainLayer::OnImGuiRender()
 
 
 	ImGui::Begin("More plots");
-	if (ImPlot::BeginSubplots("1", win1_row_count, win1_col_count, { -1, -1 }))
+	if (ImPlot::BeginSubplots("1", (int)win1_row_count, (int)win1_col_count, { -1, -1 }))
 	{
 		if (ImPlot::BeginPlot("")) {
-			ImPlot::SetNextLineStyle({ 1, 0, 1, 1 });
+			ImPlot::SetNextLineStyle({ 1.f, 0.f, 1.f, 1.f });
 			ImPlot::SetupAxes("Time [s]", "AoA [deg]");
-			ImPlot::PlotLine("", t_s.data(), alpha_deg.data(), t_s.size());
+			ImPlot::PlotLine("", t_s.data(), alpha_deg.data(), (int)t_s.size());
 			ImPlot::EndPlot();
 		}
 
 		if (ImPlot::BeginPlot("")) {
-			ImPlot::SetNextLineStyle({ 1, 0, 1, 1 });
+			ImPlot::SetNextLineStyle({ 1.f, 0.f, 1.f, 1.f });
 			ImPlot::SetupAxes("Time [s]", "AoS [deg]");
-			ImPlot::PlotLine("", t_s.data(), beta_deg.data(), t_s.size());
+			ImPlot::PlotLine("", t_s.data(), beta_deg.data(), (int)t_s.size());
 			ImPlot::EndPlot();
 		}
 
 		if (ImPlot::BeginPlot("")) {
-			ImPlot::SetNextLineStyle({ 1, 0, 1, 1 });
+			ImPlot::SetNextLineStyle({ 1.f, 0.f, 1.f, 1.f });
 			ImPlot::SetupAxes("Time [s]", "Mach");
-			ImPlot::PlotLine("", t_s.data(), mach_number.data(), t_s.size());
+			ImPlot::PlotLine("", t_s.data(), mach_number.data(), (int)t_s.size());
+			ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+			ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["mach"].data(), (int)verification_data["t_s"].size());
 			ImPlot::EndPlot();
 		}
 
 		if (ImPlot::BeginPlot("")) {
-			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetNextLineStyle({ 0.02f, 0.73f, 0.87f, 1.f });
 			ImPlot::SetupAxes("Time [s]", "North [m]");
-			ImPlot::PlotLine("", t_s.data(), vars_to_plot[8].data(), t_s.size());
+			ImPlot::PlotLine("", t_s.data(), vars_to_plot[8].data(), (int)t_s.size());
+			ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+			ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["north_m"].data(), (int)verification_data["t_s"].size());
 			ImPlot::EndPlot();
 		}
 
 		if (ImPlot::BeginPlot("")) {
-			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetNextLineStyle({ 0.02f, 0.73f, 0.87f, 1.f });
 			ImPlot::SetupAxes("Time [s]", "East [m]");
-			ImPlot::PlotLine("", t_s.data(), vars_to_plot[9].data(), t_s.size());
+			ImPlot::PlotLine("", t_s.data(), vars_to_plot[9].data(), (int)t_s.size());
+			ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+			ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["east_m"].data(), (int)verification_data["t_s"].size());
 			ImPlot::EndPlot();
 		}
 
 		if (ImPlot::BeginPlot("")) {
-			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetNextLineStyle({ 0.02f, 0.73f, 0.87f, 1.f });
 			ImPlot::SetupAxes("Time [s]", "Altitude [m]");
-			ImPlot::PlotLine("", t_s.data(), vars_to_plot[10].data(), t_s.size());
+			ImPlot::PlotLine("", t_s.data(), vars_to_plot[10].data(), (int)t_s.size());
+			ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+			ImPlot::PlotLine("", verification_data["t_s"].data(), verification_data["alt_m"].data(), (int)verification_data["t_s"].size());
 			ImPlot::EndPlot();
 		}
 
 		if (ImPlot::BeginPlot("")) {
-			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetNextLineStyle({ 0.02f, 0.73f, 0.87f, 1.f });
 			ImPlot::SetupAxes("North [m]", "Altitude [m]");
-			ImPlot::PlotLine("", vars_to_plot[8].data(), vars_to_plot[10].data(), t_s.size());
+			ImPlot::PlotLine("", vars_to_plot[8].data(), vars_to_plot[10].data(), (int)t_s.size());
+			ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+			ImPlot::PlotLine("", verification_data["north_m"].data(), verification_data["alt_m"].data(), (int)verification_data["t_s"].size());
 			ImPlot::EndPlot();
 		}
 
 		if (ImPlot::BeginPlot("")) {
-			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetNextLineStyle({ 0.02f, 0.73f, 0.87f, 1.f });
 			ImPlot::SetupAxes("East [m]", "Altitude [m]");
-			ImPlot::PlotLine("", vars_to_plot[9].data(), vars_to_plot[10].data(), t_s.size());
+			ImPlot::PlotLine("", vars_to_plot[9].data(), vars_to_plot[10].data(), (int)t_s.size());
+			ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+			ImPlot::PlotLine("", verification_data["east_m"].data(), verification_data["alt_m"].data(), (int)verification_data["t_s"].size());
 			ImPlot::EndPlot();
 		}
 
 		if (ImPlot::BeginPlot("")) {
-			ImPlot::SetNextLineStyle({ 0.02, 0.73, 0.87, 1 });
+			ImPlot::SetNextLineStyle({ 0.02f, 0.73f, 0.87f, 1.f });
 			ImPlot::SetupAxes("East [m]", "North [m]");
-			ImPlot::PlotLine("", vars_to_plot[8].data(), vars_to_plot[9].data(), t_s.size());
+			ImPlot::PlotLine("", vars_to_plot[8].data(), vars_to_plot[9].data(), (int)t_s.size());
+			ImPlot::SetNextLineStyle({ 1, 0, 0, 1 });
+			ImPlot::PlotLine("", verification_data["east_m"].data(), verification_data["north_m"].data(), (int)verification_data["t_s"].size());
 			ImPlot::EndPlot();
 		}
 	}
@@ -289,4 +344,27 @@ void MainLayer::SetStyle()
 	colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
 	colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.78f, 0.69f, 0.69f, 0.20f);
 	colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+}
+
+void MainLayer::LoadVerificationData()
+{
+	verification_data = Table("assets/verification/Atmos_01_sim_02.csv", UnitsTransform);
+
+	verification_data.rename_col("time", "t_s");
+
+	verification_data.rename_col("feVelocity_ft_s_X", "u_b_mps");
+	verification_data.rename_col("feVelocity_ft_s_Y", "v_b_mps");
+	verification_data.rename_col("feVelocity_ft_s_Z", "w_b_mps");
+
+	verification_data.rename_col("eulerAngle_deg_Roll", "phi_n_r");
+	verification_data.rename_col("eulerAngle_deg_Pitch", "theta_n_r");
+
+	verification_data.rename_col("bodyAngularRateWrtEi_deg_s_Roll", "p_b_rps");
+	verification_data.rename_col("bodyAngularRateWrtEi_deg_s_Pitch", "q_b_rps");
+	verification_data.rename_col("bodyAngularRateWrtEi_deg_s_Yaw", "r_b_rps");
+
+	verification_data.rename_col("gePosition_ft_Z", "north_m");
+	verification_data.rename_col("gePosition_ft_Y", "east_m");
+	verification_data.rename_col("altitudeMsl_ft", "alt_m");
+
 }

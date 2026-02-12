@@ -2,12 +2,12 @@
 
 namespace Math
 {
-	std::vector<float> RangeArray(float start, float stop, float step)
+	std::vector<double> RangeArray(double start, double stop, double step)
 	{
-		std::vector<float> ans;
+		std::vector<double> ans;
 		ans.reserve(size_t(ceil((stop - start) / step)));
 
-		float val = start;
+		double val = start;
 
 		while (val < stop) {
 			ans.push_back(val);

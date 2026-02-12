@@ -1,13 +1,15 @@
 #pragma once
 
+#include <DataTools/Table.h>
+
 #include <vector>
 #include <string>
 
 struct USSA1976
 {
-	std::vector<float> rho_kgpm3_table;
-	std::vector<float> cs_mps_table;
+	Table table;
 
-	static float InterpByTable(const std::vector<float>&, float h);
-	USSA1976();
+	static double InterpByTable(const std::vector<double>&, double h);
+	USSA1976()
+	: table("assets/atmosphere/ussa1976.csv") { }
 };

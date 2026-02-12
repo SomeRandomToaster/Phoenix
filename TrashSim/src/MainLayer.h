@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Phoenix.h>
+#include <DataTools/Table.h>
 
 class MainLayer : public Phoenix::Layer
 {
@@ -24,17 +25,20 @@ class MainLayer : public Phoenix::Layer
 	};
 
 
-	std::vector<std::vector<float>> vars_to_plot;
+	std::vector<std::vector<double>> vars_to_plot;
 
-	std::vector<float> t_s;
-	std::vector<std::vector<float>> plot_y;
-	int customRGBMap;
+	std::vector<double> t_s;
+	std::vector<std::vector<double>> plot_y;
 
-	std::vector <float> alpha_deg;
-	std::vector <float> beta_deg;
-	std::vector <float> mach_number;
+	std::vector <double> alpha_deg;
+	std::vector <double> beta_deg;
+	std::vector <double> mach_number;
+	
+	bool verification_mode = true;
+	Table verification_data;
 
 	void SetStyle();
+	void LoadVerificationData();
 public:
 	void OnAttach() override;
 	void OnImGuiRender() override;

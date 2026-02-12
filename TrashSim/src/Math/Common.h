@@ -4,7 +4,7 @@
 
 namespace Math
 {
-	std::vector<float> RangeArray(float start, float stop, float step);
+	std::vector<double> RangeArray(double start, double stop, double step);
 
-	inline float Lerp(float a, float b, float t) { return a * (1 - t) + b * t; }
+	inline double Lerp(double a, double b, double t) { return a * (1 - t) + b * t; }
 }
